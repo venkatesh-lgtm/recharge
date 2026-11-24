@@ -6,20 +6,20 @@
 <title>Recharge Plan Picker</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400..700&display=swap" rel="stylesheet">
 <style>
 /* VOICE a money tool from a careful product team: calm, exact, confident
    IDEA the recharge receipt you get at the counter, torn along its perforation
    PICTURE the winning plan as a large receipt with notches and a dark stub, then a network leaderboard with real score bars
    COLOUR white page, grey work surface, near-black ink, one red (AboutMoney's colour) for winners and calls to action
-   TYPE Geist 600 tight for titles and figures, Geist 400 for text
+   TYPE Google Sans 600 tight for titles and figures, 400 for text
    LAYOUT nav, title with fact strip, controls left and results right on grey, red AboutMoney band, plan table, footer; one column on phones */
 :root{color-scheme:light dark;--bg:light-dark(#ffffff,#0c0c0e);--sf:light-dark(#f4f4f2,#141417);--card:light-dark(#ffffff,#1b1b1f);--ink:light-dark(#0b0b0c,#f4f4f5);--mute:light-dark(#5c5c62,#a3a3ab);--line:light-dark(#e4e4e0,#2b2b31);--red:#e11d2e;--redsoft:light-dark(#fdecee,#3b161b);--shadow:light-dark(0 1px 2px rgba(15,15,20,.06),0 1px 2px rgba(0,0,0,.4))}
 :root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
 *{box-sizing:border-box;min-width:0}
 html,body{margin:0}
 html{scroll-padding-top:76px}
-body{background:var(--bg);color:var(--ink);font:16px/1.55 Geist,system-ui,-apple-system,"Segoe UI",sans-serif;overflow-x:clip;padding-bottom:72px;-webkit-font-smoothing:antialiased}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 "Google Sans",system-ui,-apple-system,"Segoe UI",sans-serif;overflow-x:clip;padding-bottom:72px;-webkit-font-smoothing:antialiased}
 h1,h2,.fig-num,.facts b{letter-spacing:-.03em;font-weight:600}
 h1{font-size:clamp(34px,4.4vw,54px);line-height:1.02;margin:0 0 14px;max-width:16ch;text-wrap:balance}
 h2{font-size:21px;line-height:1.2;margin:0 0 14px}
@@ -54,15 +54,16 @@ a{color:inherit}
 .card:empty{display:none}
 .ctl+.ctl{border-top:1px solid var(--line);margin-top:20px;padding-top:20px}
 .lab{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-weight:600;font-size:15px;margin-bottom:10px}
-.lab b{font-size:22px;font-weight:600;letter-spacing:-.02em;white-space:nowrap;font-variant-numeric:tabular-nums}
+.lab>label,.lab>span{flex:1 1 0}
+.lab b{flex:none;font-size:20px;font-weight:600;letter-spacing:-.02em;white-space:nowrap;font-variant-numeric:tabular-nums}
 .q .lab{font-size:17px}
 .q select{min-height:54px;font-size:17px;border:1.5px solid var(--ink);font-weight:500}
 
-.seg{display:grid;grid-template-columns:repeat(auto-fit,minmax(6.5em,1fr));gap:4px;background:var(--sf);border:1px solid var(--line);padding:4px;border-radius:14px}
-.seg button{font:500 14px Geist,sans-serif;min-height:40px;padding:6px 10px;border:0;border-radius:10px;background:transparent;color:var(--mute);cursor:pointer}
+.seg{display:grid;grid-template-columns:repeat(auto-fit,minmax(5.6em,1fr));gap:4px;background:var(--sf);border:1px solid var(--line);padding:4px;border-radius:14px}
+.seg button{font:500 14px "Google Sans",system-ui,sans-serif;min-height:40px;padding:6px 10px;border:0;border-radius:10px;background:transparent;color:var(--mute);cursor:pointer}
 .seg button[aria-pressed=true]{background:var(--card);color:var(--ink);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.12)}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{font:500 14px Geist,sans-serif;min-height:40px;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;gap:7px}
+.chip{font:500 14px "Google Sans",system-ui,sans-serif;min-height:40px;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;gap:7px}
 .chip:hover{border-color:var(--mute)}
 .chip[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid var(--red);outline-offset:2px}
@@ -72,28 +73,38 @@ input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:999px;
 input[type=range]::-moz-range-track{height:6px;border-radius:999px;background:var(--line)}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;margin-top:-9px;border-radius:50%;background:var(--ink);border:4px solid var(--card);box-shadow:0 0 0 1px var(--ink)}
 input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--ink);border:4px solid var(--card);box-shadow:0 0 0 1px var(--ink)}
+.hint{margin:10px 0 0;font-size:14px;color:var(--mute)}
+.hint b{color:var(--ink);font-weight:600;margin-right:4px}
+.dual{position:relative;height:32px}
+.dual::before{content:"";position:absolute;left:0;right:0;top:13px;height:6px;border-radius:999px;background:var(--line)}
+.dual-fill{position:absolute;top:13px;height:6px;border-radius:999px;background:var(--ink)}
+.dual input{position:absolute;inset:0;pointer-events:none;margin:0}
+.dual input::-webkit-slider-runnable-track{background:transparent}
+.dual input::-moz-range-track{background:transparent}
+.dual input::-webkit-slider-thumb{pointer-events:auto}
+.dual input::-moz-range-thumb{pointer-events:auto}
 .ticks{display:flex;justify-content:space-between;font-size:13px;color:var(--mute);font-variant-numeric:tabular-nums}
 .tog{display:flex;gap:12px;align-items:center;min-height:44px;font-size:15px;cursor:pointer}
 .tog input{width:20px;height:20px;accent-color:var(--ink);flex:none}
-select{font:16px Geist,sans-serif;width:100%;min-height:46px;padding:8px 12px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+select{font:16px "Google Sans",system-ui,sans-serif;width:100%;min-height:46px;padding:8px 12px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
 
 .more summary{cursor:pointer;font-weight:600;font-size:15px;min-height:44px;display:flex;flex-direction:column;justify-content:center}
 .more[open] summary{margin-bottom:6px}
 .more .ctl{border-top:1px solid var(--line);margin-top:16px;padding-top:16px}
-.showall{margin-top:16px;font:600 15px Geist,sans-serif;min-height:46px;padding:8px 20px;border-radius:999px;border:1px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.showall{margin-top:16px;font:600 15px "Google Sans",system-ui,sans-serif;min-height:46px;padding:8px 20px;border-radius:999px;border:1px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
 .prow{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:8px;align-items:center;margin-top:10px;font-size:14px;color:var(--mute)}
 .prow label{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:12px;padding:0 10px;background:var(--card);min-height:44px}
-.prow input{font:16px Geist,sans-serif;width:100%;border:0;background:transparent;color:var(--ink);min-height:40px;font-variant-numeric:tabular-nums}
+.prow input{font:16px "Google Sans",system-ui,sans-serif;width:100%;border:0;background:transparent;color:var(--ink);min-height:40px;font-variant-numeric:tabular-nums}
 .prow input:focus{outline:none}
 .prow label:focus-within{outline:3px solid var(--red);outline-offset:2px}
 .calc{margin-top:12px;border:1px solid var(--line);border-radius:14px;padding:2px 14px;background:var(--sf)}
 .calc summary{cursor:pointer;font-weight:600;font-size:15px;min-height:44px;display:flex;align-items:center}
 .crow{display:grid;grid-template-columns:minmax(0,1fr) 5.2em;gap:10px;align-items:center;padding:5px 0;font-size:14px}
 .crow small{display:block;color:var(--mute);font-size:13px}
-.crow input{font:16px Geist,sans-serif;width:100%;min-height:40px;padding:6px 8px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);text-align:right;font-variant-numeric:tabular-nums}
+.crow input{font:16px "Google Sans",system-ui,sans-serif;width:100%;min-height:40px;padding:6px 8px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);text-align:right;font-variant-numeric:tabular-nums}
 .cout{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:10px 0;font-weight:500}
 .cout b{font-size:22px;font-weight:600;letter-spacing:-.02em}
-.mini{font:600 14px Geist,sans-serif;min-height:40px;padding:6px 16px;border-radius:999px;border:0;background:var(--ink);color:var(--bg);cursor:pointer}
+.mini{font:600 14px "Google Sans",system-ui,sans-serif;min-height:40px;padding:6px 16px;border-radius:999px;border:0;background:var(--ink);color:var(--bg);cursor:pointer}
 
 .voucher{background:var(--card);border-radius:22px;border:1px solid var(--line);overflow:hidden;box-shadow:var(--shadow)}
 .v-main{padding:clamp(20px,3vw,32px)}
@@ -110,10 +121,17 @@ select{font:16px Geist,sans-serif;width:100%;min-height:46px;padding:8px 12px;bo
 .stub::before{left:-12px}.stub::after{right:-12px}
 .stub small{font-size:14px;opacity:.75}
 .stub .y{font-size:26px;font-weight:600;letter-spacing:-.02em;white-space:nowrap;font-variant-numeric:tabular-nums}
+.warn{margin-top:14px;padding:14px 16px;border-radius:14px;background:var(--redsoft);border:1px solid color-mix(in srgb,var(--red) 35%,transparent);font-size:15px}
+.warn b{color:var(--red)}
+.traps{margin-top:14px;padding:16px 18px;border-radius:16px;background:var(--card);border:1px solid var(--line)}
+.traps h3{font-size:16px;margin:0 0 8px;font-weight:600}
+.traps ul{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+.traps li{position:relative;padding-left:20px;font-size:14px;line-height:1.5}
+.traps li::before{content:"";position:absolute;left:2px;top:7px;width:8px;height:8px;border-radius:50%;background:var(--red)}
 .why{margin:16px 2px 0;font-size:15px;color:var(--mute);max-width:70ch}
 .save{margin-top:12px;padding:14px 16px;border-radius:14px;background:var(--card);border:1px solid var(--line);font-size:15px}
 .save:empty{display:none}
-.copy{margin-top:14px;font:600 15px Geist,sans-serif;min-height:44px;padding:8px 18px;border-radius:999px;border:1px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.copy{margin-top:14px;font:600 15px "Google Sans",system-ui,sans-serif;min-height:44px;padding:8px 18px;border-radius:999px;border:1px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
 .copy:hover{background:var(--ink);color:var(--bg)}
 .tag{display:inline-block;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--sf);border:1px solid var(--line);color:var(--ink);white-space:nowrap}
 .tag.t1{background:var(--red);border-color:var(--red);color:#fff}
@@ -239,20 +257,16 @@ td a{color:var(--mute)}
 <div class="ctl">
 <div class="lab">Pick the plan by</div>
 <div class="seg" id="mode">
+<button type="button" data-v="best">Best overall</button>
 <button type="button" data-v="price">Lowest price</button>
-<button type="button" data-v="net">Best network here</button>
+<button type="button" data-v="net">Best network</button>
 </div>
 </div>
 <div class="ctl">
-<div class="lab">How do you use your phone?</div>
-<div class="chips" id="presets">
-<button type="button" class="chip" data-v="0">Calls only</button>
-<button type="button" class="chip" data-v="1">Light</button>
-<button type="button" class="chip" data-v="1.5">Regular</button>
-<button type="button" class="chip" data-v="2">Heavy</button>
-<button type="button" class="chip" data-v="3">Binge</button>
-</div>
-<p class="sub">Light: WhatsApp, maps. Regular: about an hour of reels or YouTube a day. Heavy: 2 to 3 hours of video. Binge: hotspot and HD streaming.</p>
+<div class="lab"><label for="gb">How much data do you use a day?</label><b id="gbv">1.5 GB</b></div>
+<input type="range" id="gb" min="0" max="4" step="0.5" value="1.5" aria-describedby="gbd">
+<div class="ticks"><span>0</span><span>1</span><span>2</span><span>3</span><span>4 GB</span></div>
+<p class="hint" id="gbd"><b id="gbu">Regular</b> <span id="gbt">About an hour of reels or YouTube a day.</span></p>
 <details class="calc" id="calc"><summary>Not sure? Work it out from your day</summary>
 <p class="sub" style="margin:0 0 6px">Hours a day on mobile data, not Wi-Fi.</p>
 <div id="crows"></div>
@@ -261,35 +275,25 @@ td a{color:var(--mute)}
 </details>
 </div>
 <div class="ctl">
-<div class="lab"><label for="gb">Data you need each day</label><b id="gbv">1.5 GB</b></div>
-<input type="range" id="gb" min="0" max="4" step="0.5" value="1.5">
-<div class="ticks"><span>0</span><span>1</span><span>2</span><span>3</span><span>4 GB</span></div>
+<div class="lab"><label for="valr">How often do you want to recharge?</label><b id="valv">Any</b></div>
+<input type="range" id="valr" min="0" max="3" step="1" value="0">
+<div class="ticks"><span>Any</span><span>Monthly</span><span>2–3 months</span><span>Yearly</span></div>
 </div>
 <div class="ctl">
-<div class="lab">Recharge how often?</div>
-<div class="seg" id="val">
-<button type="button" data-v="any">Any</button>
-<button type="button" data-v="m">Monthly</button>
-<button type="button" data-v="q">2–3 months</button>
-<button type="button" data-v="y">Yearly</button>
+<div class="lab"><span id="prl">Recharge price</span><b id="prv">Any price</b></div>
+<div class="dual" role="group" aria-labelledby="prl">
+<div class="dual-fill" id="pfill"></div>
+<input type="range" id="pmin" min="0" max="4000" step="50" value="0" aria-label="Minimum recharge price">
+<input type="range" id="pmax" min="0" max="4000" step="50" value="4000" aria-label="Maximum recharge price">
 </div>
-</div>
-<div class="ctl">
-<div class="lab">Recharge price <b id="prv">Any</b></div>
-<div class="chips" id="prc">
-<button type="button" class="chip" data-v="0-99999">Any</button>
-<button type="button" class="chip" data-v="0-300">Under ₹300</button>
-<button type="button" class="chip" data-v="300-600">₹300–600</button>
-<button type="button" class="chip" data-v="600-1200">₹600–1,200</button>
-<button type="button" class="chip" data-v="1200-99999">₹1,200+</button>
-</div>
-<div class="prow"><label for="pmin">Min ₹<input type="number" id="pmin" min="0" step="10" inputmode="numeric" placeholder="0"></label><span>to</span><label for="pmax">Max ₹<input type="number" id="pmax" min="0" step="10" inputmode="numeric" placeholder="No limit"></label></div>
-<p class="sub">The amount you pay at recharge, not the monthly cost.</p>
+<div class="ticks"><span>₹0</span><span>₹1,000</span><span>₹2,000</span><span>₹3,000</span><span>No limit</span></div>
+<p class="sub">The amount you pay at recharge, not the monthly cost. Drag both ends.</p>
 </div>
 <details class="ctl more" id="more"><summary>More options <span class="sub" style="margin:0">operators, 5G, OTT, second SIM</span></summary>
 <div class="ctl">
 <div class="lab">Operators to compare</div>
 <div class="chips" id="ops"></div>
+<p class="sub" id="opwarn"></p>
 </div>
 <div class="ctl">
 <label class="tog"><input type="checkbox" id="g5"> I have a 5G phone and 5G works where I live</label>
@@ -492,12 +496,15 @@ function netRank(code){
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const rs=n=>'₹'+n.toLocaleString('en-IN');
-const S={st:'',gb:1.5,val:'any',ops:Object.keys(OPS),g5:false,ott:false,cap:false,cur:'',sim2:'',pmin:0,pmax:0,mode:'price',sort:'pm',dir:1,hrs:[1,0.5,0.25,1,0.5,0],amx:false};
+const VALS=['any','m','q','y'],VALT=['Any','Monthly','2–3 months','Yearly'];
+const USEL=[[0,'Calls only','Just calls and SMS, almost no data.'],[1,'Light','WhatsApp, maps and a little browsing.'],[1.5,'Regular','About an hour of reels or YouTube a day.'],[2.5,'Heavy','2 to 3 hours of video a day.'],[99,'Binge','Hotspot, HD streaming, hours of video.']];
+const S={st:'',gb:1.5,val:'any',ops:Object.keys(OPS),g5:false,ott:false,cap:false,cur:'',sim2:'',pmin:0,pmax:0,mode:'best',sort:'pm',dir:1,hrs:[1,0.5,0.25,1,0.5,0],amx:false};
 // usage calculator: label, hint, GB per hour
 const USE=[['Reels and shorts','Instagram, YouTube Shorts',1],['YouTube, OTT on phone','standard quality',0.7],['Video calls','WhatsApp, Meet',0.3],['Social feeds, browsing, maps','',0.15],['Music streaming','',0.1],['Hotspot to a laptop','',1]];
 const PLAY='https://play.google.com/store/apps/details?id=com.techburner.aboutmoney',IOS='https://apps.apple.com/in/app/aboutmoney-expense-tracker/id6771859753';
 const isIOS=/iPhone|iPad|iPod/.test(navigator.userAgent);
 try{Object.assign(S,JSON.parse(localStorage.getItem('rpp3')||'{}'))}catch(e){}
+if(!S.v4){S.mode='best';S.v4=1}
 
 $('cnt').textContent=P.length;
 $('st').innerHTML='<option value="">Choose your state</option>'+STATES.map((s,i)=>`<option value="${i}">${s[0]}</option>`).join('');
@@ -531,15 +538,43 @@ const fits=(p,rc)=>S.ops.includes(p.op)&&base(p,rc);
 const byPrice=(a,b)=>a.pm-b.pm||b.dd-a.dd||a.price-b.price;
 const srcLink=p=>p.s&&SRC[p.s]?`<a href="${SRC[p.s][1]}" target="_blank" rel="noopener">${esc(SRC[p.s][0])}</a>`:'';
 
+// catches people miss, worked out from each plan's terms
+function traps(p,rc){
+  const t=[],pq=p.op==='BSNL'?'40 Kbps':(p.op==='Airtel'&&p.price===929)?'16 Kbps':'64 Kbps';
+  const noData=!p.ul&&!p.dpd&&!p.extra;
+  if(noData)t.push(p.op==='Airtel'||p.op==='Vi'?'No data included. If mobile data is left on, it costs 50p per MB (₹500 per GB), so switch it off.':'No data included, so keep mobile data switched off or use Wi-Fi.');
+  else if(!p.ul&&!p.dpd)t.push(p.op==='Airtel'||p.op==='Vi'?`Only ${dataTxt(p)} for the whole ${valTxt(p.days)}. After that, data costs 50p per MB (₹500 per GB).`:`Only ${dataTxt(p)} for the whole ${valTxt(p.days)}. After that, speed drops to ${pq}.`);
+  if(p.dpd&&!p.ul)t.push(`After ${p.dpd} GB in a day, speed drops to ${pq}, too slow for video, until midnight.`);
+  if(p.ul){const m=p.ul.match(/\((.*)\)/);t.push(`"Unlimited" still has a fair-use limit: ${m?m[1]:'the cap isn\'t published yet, so very heavy use may be slowed'}.${p.op==='Airtel'?' Airtel treats more than 300 GB in 30 days as possible commercial use.':''}`)}
+  if(p.ul&&p.op==='Airtel')t.push("Airtel hasn't officially confirmed this plan in every state, so check it appears in the Airtel Thanks app.");
+  if(S.g5&&u5(p,rc)&&!p.ul&&p.dd<S.gb)t.push(`You only get ${S.gb} GB a day thanks to unlimited 5G. Indoors or outside 5G areas you're back to ${p.dpd} GB a day.`);
+  if(p.op==='Vi'&&u5(p,rc))t.push('Vi 5G works only in the cities where Vi has launched it, not across the whole state.');
+  if(p.calls==='l')t.push(`Calls are limited (${p.ott}). After that you pay per minute.`);
+  if(p.days===28)t.push('28-day validity means 13 recharges a year, not 12. The yearly cost shown already includes the 13th.');
+  if(p.days>365)t.push(`You pay ${rs(p.price)} upfront for ${valTxt(p.days)}. If you port out, the rest is lost, and tariffs can change before it ends.`);
+  else if(p.days>=150)t.push(`${rs(p.price)} is paid upfront. If you switch operator before ${valTxt(p.days)} are up, the unused part isn't refunded.`);
+  if(p.op==='Jio'&&/Hotstar/.test(p.ott)&&p.days<=30)t.push('JioHotstar on Jio monthly plans can depend on recharging again within 48 hours of expiry.');
+  if(p.chk)t.push('Sources disagree on some details of this plan. Confirm the exact benefits in the app before paying.');
+  return t;
+}
+function weakNet(op,nr,rc){
+  const k=nr.rank(op);if(k<3)return '';
+  const w=nr.wins[op];
+  return `${op}'s network is weak in ${RG[rc]}. In Opensignal's tests it ranked ${k} of 4 there and ${w.length?'won only '+w.join(', '):'won no category'}${op==='BSNL'?'. It also runs 4G only':''}.`;
+}
+// best overall: strongest two networks, a year or less, details confirmed
+function pickBest(list,nr){
+  const ok=list.filter(p=>nr.rank(p.op)<=2&&p.days<=365);
+  return ok.find(p=>!p.chk)||ok[0]||list.find(p=>p.days<=365)||list[0];
+}
 function why(p,list,rc){
   const b=[];
-  if(S.mode==='net')b.push(`${p.op} has the best network in ${RG[rc]}, and this is its cheapest plan that matches what you picked.`);
+  if(S.mode==='best')b.push(`The cheapest plan on one of the two strongest networks in ${RG[rc]} whose details we could confirm. Plans longer than a year are left out of this pick.`);
+  else if(S.mode==='net')b.push(`${p.op} has the best network in ${RG[rc]}, and this is its cheapest plan that matches what you picked.`);
   else b.push(`Cheapest of ${list.length} plan${list.length>1?'s':''} sold in ${stName()} that match what you picked.`);
   if(S.g5&&u5(p,rc)&&!p.ul&&p.dd<S.gb)b.push(`Its daily quota is ${dataTxt(p)}, but unlimited 5G covers the rest where you have 5G coverage.`);
   else if(S.gb>0&&!p.ul&&p.dd>S.gb+0.4)b.push('It gives more data than you need, because no smaller plan here costs less per month.');
   if(p.days>=84)b.push(`You pay ${rs(p.price)} upfront and skip ${Math.max(1,Math.round(p.days/28)-1)} recharges.`);
-  if(p.op==='BSNL')b.push('BSNL is 4G only, so check signal at home first.');
-  if(p.chk)b.push('Sources disagree on some details of this plan, so confirm it in the app before paying.');
   return b.join(' ');
 }
 
@@ -548,14 +583,14 @@ function render(){
   const rc=region();
   $('st').value=S.st;$('gb').value=S.gb;$('gbv').textContent=S.gb===0?'None':S.gb+' GB';
   $('g5').checked=S.g5;$('ott').checked=S.ott;$('cap').checked=S.cap;$('cur').value=S.cur;
-  for(const b of $('presets').children)b.setAttribute('aria-pressed',+b.dataset.v===S.gb);
-  for(const b of $('val').children)b.setAttribute('aria-pressed',b.dataset.v===S.val);
+  const ul=USEL.find(u=>S.gb<=u[0]);$('gbu').textContent=ul[1];$('gbt').textContent=ul[2];
+  $('valr').value=VALS.indexOf(S.val);$('valv').textContent=VALT[VALS.indexOf(S.val)];
   for(const b of $('mode').children)b.setAttribute('aria-pressed',b.dataset.v===S.mode);
   for(const b of $('ops').children)b.setAttribute('aria-pressed',S.ops.includes(b.dataset.v));
   $('sim2').value=S.sim2;
-  if(document.activeElement!==$('pmin'))$('pmin').value=S.pmin||'';if(document.activeElement!==$('pmax'))$('pmax').value=S.pmax||'';
-  const pk=(S.pmin||0)+'-'+(S.pmax||99999);for(const b of $('prc').children)b.setAttribute('aria-pressed',b.dataset.v===pk);
-  $('prv').textContent=!S.pmin&&!S.pmax?'Any':!S.pmax?rs(S.pmin)+'+':!S.pmin?'Up to '+rs(S.pmax):rs(S.pmin)+'–'+rs(S.pmax);
+  const lo=S.pmin||0,hi=S.pmax||4000;$('pmin').value=lo;$('pmax').value=hi;
+  $('pfill').style.left=(lo/40)+'%';$('pfill').style.width=((hi-lo)/40)+'%';
+  $('prv').textContent=!S.pmin&&!S.pmax?'Any price':!S.pmax?rs(S.pmin)+' +':!S.pmin?'Up to '+rs(S.pmax):rs(S.pmin)+' – '+rs(S.pmax);
   USE.forEach((u,i)=>{const el=$('h'+i);if(document.activeElement!==el)el.value=S.hrs[i]});
   const cg=calcGB();$('cgb').textContent=cg.toFixed(1)+' GB';
   const cgr=Math.min(4,Math.ceil(cg*2)/2);$('cuse').textContent=cg<0.05?'Calls only':'Use '+cgr+' GB/day';
@@ -563,14 +598,17 @@ function render(){
   $('s2').innerHTML='';$('amcardh').textContent='Track this recharge in AboutMoney';$('amhook').textContent='Recharge sorted. Now the rest of your money.';
 
   if(!rc){
+    $('opwarn').textContent='';
     $('pick').innerHTML='<div class="empty"><h2>First, which state are you in?</h2><p class="sub" style="font-size:15px">Choose it at the top of the form. Network quality, 5G and many plans depend on where you live, so the pick changes by state.</p></div>';
     $('net').innerHTML='';$('rows').innerHTML='';$('rankh').textContent='';
     renderTable(null,null);return;
   }
   const nr=netRank(rc);
+  const weakOps=nr.order.filter(o=>nr.rank(o)>=3);
+  $('opwarn').textContent=`In ${stName()}, ${weakOps.join(' and ')} have the weakest networks in Opensignal's tests.`+(S.ops.length&&S.ops.every(o=>weakOps.includes(o))?' You\'ve only kept those, so expect weaker signal.':'');
   const list=P.filter(p=>fits(p,rc)).sort(byPrice);
   const topNet=nr.order.find(o=>S.ops.includes(o)&&list.some(p=>p.op===o));
-  const best=S.mode==='net'?list.find(p=>p.op===topNet):list[0];
+  const best=S.mode==='net'?(list.find(p=>p.op===topNet&&p.days<=365)||list.find(p=>p.op===topNet)):S.mode==='best'?pickBest(list,nr):list[0];
 
   $('net').innerHTML=`<h2>Network in ${esc(stName())}</h2>`+nr.order.map((o,i,_,mx=Math.max(1,...Object.values(nr.sc)))=>`<div class="nrow${i?'':' top'}"><div class="rk">${i+1}</div><div class="on"><span class="dot" style="background:${OPS[o]}"></span> ${o}</div><div class="nb"><i style="width:${Math.max(3,nr.sc[o]/mx*100)}%"></i></div><div class="w">${nr.wins[o].length?'Wins '+nr.wins[o].join(', '):(o==='BSNL'?'Wins nothing here. 4G only, slowest in tests':'Wins no category here')}</div></div>`).join('')+`<p class="sub">Opensignal, ${esc(RG[rc])} region, February 2026 report.${rc==='DL'||rc==='MU'?' In Delhi and Mumbai, BSNL service runs through MTNL, so its plans there may differ.':''}</p>`;
 
@@ -580,8 +618,11 @@ function render(){
   }else{
     const r=nr.rank(best.op),cheapest=list[0];
     let save='';
-    if(S.mode==='price'&&r>1){
-      const alt=list.find(p=>p.op===topNet);
+    if(S.mode==='best'&&cheapest.id!==best.id){
+      const cr=nr.rank(cheapest.op);
+      save=`Cheapest of all is ${esc(cheapest.op)} ${rs(cheapest.price)} at ${rs(cheapest.pm)}/month, ${rs(best.pm-cheapest.pm)} a month less${cr>=3?`, but on the ${cr===3?'3rd':'weakest'} network here`:cheapest.days>365?', but it locks your money in for '+valTxt(cheapest.days):cheapest.chk?', but sources disagree on its details':''}.`;
+    }else if(S.mode==='price'&&r>1){
+      const alt=list.find(p=>p.op===topNet&&p.days<=365)||list.find(p=>p.op===topNet);
       if(alt)save=`Want the best network in ${esc(stName())}? ${esc(alt.op)} ${rs(alt.price)} costs ${rs(alt.pm)}/month, ${rs(alt.pm-best.pm)} a month more.`;
     }else if(S.mode==='net'&&cheapest.id!==best.id){
       const cr=nr.rank(cheapest.op);
@@ -592,9 +633,11 @@ function render(){
       if(own&&own.op!==best.op){const d=own.py-best.py;save+=d>0?` Your best ${esc(S.cur)} option is ${rs(own.price)} (${rs(own.pm)}/month); porting would save about <strong>${rs(d)} a year</strong>.`:` Staying on ${esc(S.cur)} with ${rs(own.price)} costs about the same or less.`}
       else if(own)save+=` The pick is on ${esc(S.cur)}, so you don't need to port.`;
       else save+=` ${esc(S.cur)} has no plan in this list that matches your choices.`;
+      if(nr.rank(S.cur)>=3&&S.cur!==best.op)save+=` Also, ${esc(weakNet(S.cur,nr,rc))}`;
     }
+    const wk=weakNet(best.op,nr,rc),tr=traps(best,rc);
     $('pick').innerHTML=`<div class="voucher"><div class="v-main">
-      <div class="v-op"><span class="dot" style="background:${OPS[best.op]}"></span>${esc(best.op)} prepaid · ${S.mode==='net'?'best network pick':'best price pick'} <span class="tag${r===1?' t1':''}">${RANKTXT[r]}</span>${best.chk?' <span class="tag chk">Check in app</span>':''}</div>
+      <div class="v-op"><span class="dot" style="background:${OPS[best.op]}"></span>${esc(best.op)} prepaid · ${S.mode==='net'?'best network pick':S.mode==='best'?'best overall pick':'lowest price pick'} <span class="tag${r===1?' t1':''}">${RANKTXT[r]}</span>${best.chk?' <span class="tag chk">Check in app</span>':''}</div>
       <div class="fig-num">${rs(best.price)}</div>
       <div class="v-per">works out to <strong>${rs(best.pm)} a month</strong></div>
       <div class="v-grid">
@@ -605,6 +648,8 @@ function render(){
         ${best.ott&&best.calls==='u'?`<div>Extras<span>${esc(best.ott)}</span></div>`:''}
       </div></div>
       <div class="stub"><small>Cost for a year</small><div class="y">${rs(best.py)}</div><small>₹${(best.py/365).toFixed(2)} a day</small></div></div>
+      ${wk?`<div class="warn"><b>Heads up:</b> ${esc(wk)} Ask neighbours or borrow a SIM to test signal at home before you switch.</div>`:''}
+      <div class="traps"><h3>${tr.length?'Watch out for':'No catches found'}</h3>${tr.length?'<ul>'+tr.map(x=>`<li>${esc(x)}</li>`).join('')+'</ul>':'<p class="sub">This plan has no data caps, call limits or lock-ins worth flagging.</p>'}</div>
       <p class="why">${esc(why(best,list,rc))} <span class="sub">Source: ${srcLink(best)}</span></p>
       <div class="save">${save.trim()}</div>
       <button type="button" class="copy" id="cp">Copy this plan</button>`;
@@ -650,17 +695,15 @@ function renderTable(rc,nr){
 
 $('st').addEventListener('change',e=>{S.st=e.target.value;render()});
 $('gb').addEventListener('input',e=>{S.gb=+e.target.value;render()});
-$('presets').addEventListener('click',e=>{const b=e.target.closest('button');if(b){S.gb=+b.dataset.v;render()}});
-$('val').addEventListener('click',e=>{const b=e.target.closest('button');if(b){S.val=b.dataset.v;render()}});
+$('valr').addEventListener('input',e=>{S.val=VALS[+e.target.value];render()});
 $('mode').addEventListener('click',e=>{const b=e.target.closest('button');if(b){S.mode=b.dataset.v;render()}});
 $('ops').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const o=b.dataset.v;S.ops=S.ops.includes(o)?S.ops.filter(x=>x!==o):[...S.ops,o];render()});
 $('g5').addEventListener('change',e=>{S.g5=e.target.checked;render()});
 $('ott').addEventListener('change',e=>{S.ott=e.target.checked;render()});
 $('cap').addEventListener('change',e=>{S.cap=e.target.checked;render()});
 $('cur').addEventListener('change',e=>{S.cur=e.target.value;render()});
-$('prc').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const [a,z]=b.dataset.v.split('-').map(Number);S.pmin=a;S.pmax=z>=99999?0:z;render()});
-$('pmin').addEventListener('input',e=>{S.pmin=Math.max(0,+e.target.value||0);render()});
-$('pmax').addEventListener('input',e=>{S.pmax=Math.max(0,+e.target.value||0);render()});
+$('pmin').addEventListener('input',e=>{let v=+e.target.value;const hi=S.pmax||4000;if(v>hi-50)v=Math.max(0,hi-50);S.pmin=v;render()});
+$('pmax').addEventListener('input',e=>{let v=+e.target.value;if(v<(S.pmin||0)+50)v=Math.min(4000,(S.pmin||0)+50);S.pmax=v>=4000?0:v;render()});
 $('sim2').addEventListener('change',e=>{S.sim2=e.target.value;render()});
 $('crows').addEventListener('input',e=>{const i=+e.target.id.slice(1);if(e.target.id[0]!=='h')return;S.hrs[i]=Math.max(0,Math.min(16,+e.target.value||0));render()});
 $('cuse').addEventListener('click',()=>{const cg=calcGB();S.gb=cg<0.05?0:Math.min(4,Math.ceil(cg*2)/2);render()});
