@@ -106,20 +106,24 @@ select{font:16px "Google Sans",system-ui,sans-serif;width:100%;min-height:46px;p
 .cout b{font-size:22px;font-weight:600;letter-spacing:-.02em}
 .mini{font:600 14px "Google Sans",system-ui,sans-serif;min-height:40px;padding:6px 16px;border-radius:999px;border:0;background:var(--ink);color:var(--bg);cursor:pointer}
 
-.voucher{background:var(--card);border-radius:22px;border:1px solid var(--line);overflow:hidden;box-shadow:var(--shadow)}
+.voucher{background:#111114;color:#fff;border-radius:22px;border:2px solid var(--red);overflow:hidden;box-shadow:0 10px 30px -12px color-mix(in srgb,var(--red) 55%,transparent)}
+.ribbon{display:inline-flex;align-items:center;gap:6px;background:var(--red);color:#fff;font-weight:600;font-size:13px;padding:5px 12px;border-radius:999px;margin-bottom:14px}
+.voucher .tag{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.22);color:#fff}
+.voucher .tag.t1{background:var(--red);border-color:var(--red)}
+.voucher .tag.chk{background:transparent;color:rgba(255,255,255,.75)}
 .v-main{padding:clamp(20px,3vw,32px)}
-.v-op{display:flex;align-items:center;gap:8px;font-weight:500;color:var(--mute);font-size:14px;flex-wrap:wrap}
+.v-op{display:flex;align-items:center;gap:8px;font-weight:500;color:rgba(255,255,255,.72);font-size:14px;flex-wrap:wrap}
 .dot{display:inline-block;width:10px;height:10px;border-radius:50%;flex:none}
 .fig-num{font-size:clamp(56px,8vw,92px);line-height:.95;margin:14px 0 8px;font-variant-numeric:tabular-nums}
-.v-per{font-size:18px;color:var(--mute)}
-.v-per strong{color:var(--ink);font-weight:600}
-.v-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(9em,1fr));gap:14px 20px;margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}
-.v-grid div{font-size:13px;color:var(--mute)}
-.v-grid span{display:block;font-size:16px;color:var(--ink);font-weight:500;margin-top:2px}
-.stub{position:relative;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;background:var(--ink);color:var(--bg);padding:18px clamp(20px,3vw,32px)}
-.stub::before,.stub::after{content:"";position:absolute;top:-11px;width:22px;height:22px;border-radius:50%;background:var(--sf);border:1px solid var(--line)}
+.v-per{font-size:18px;color:rgba(255,255,255,.72)}
+.v-per strong{color:#fff;font-weight:600}
+.v-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(9em,1fr));gap:14px 20px;margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,.14)}
+.v-grid div{font-size:13px;color:rgba(255,255,255,.6)}
+.v-grid span{display:block;font-size:16px;color:#fff;font-weight:500;margin-top:2px}
+.stub{position:relative;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;background:var(--red);color:#fff;padding:18px clamp(20px,3vw,32px)}
+.stub::before,.stub::after{content:"";position:absolute;top:-12px;width:24px;height:24px;border-radius:50%;background:var(--sf);border:2px solid var(--red)}
 .stub::before{left:-12px}.stub::after{right:-12px}
-.stub small{font-size:14px;opacity:.75}
+.stub small{font-size:14px;opacity:.9}
 .stub .y{font-size:26px;font-weight:600;letter-spacing:-.02em;white-space:nowrap;font-variant-numeric:tabular-nums}
 .warn{margin-top:14px;padding:14px 16px;border-radius:14px;background:var(--redsoft);border:1px solid color-mix(in srgb,var(--red) 35%,transparent);font-size:15px}
 .warn b{color:var(--red)}
@@ -206,6 +210,8 @@ tbody tr:hover td{background:var(--sf)}
 td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 th.n{text-align:right}
 tr.off td{color:var(--mute)}
+tr.pickrow td{background:var(--redsoft);color:var(--ink);font-weight:500}
+tr.pickrow td:first-child{box-shadow:inset 3px 0 0 var(--red)}
 tr.off td .tag{opacity:.6}
 td a{color:var(--mute)}
 .note{font-size:13px;color:var(--mute);margin-top:18px;max-width:84ch}
@@ -369,7 +375,7 @@ td a{color:var(--mute)}
 <a class="ig" href="https://www.instagram.com/burner.bits/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>Follow @burner.bits</a>
 </div></footer>
 
-<div class="am-bar" id="ambar"><span id="ambartxt">India's fastest expense tracker is free</span><a id="ambarlink" href="https://play.google.com/store/apps/details?id=com.techburner.aboutmoney" target="_blank" rel="noopener">Get AboutMoney</a><button type="button" id="amx" aria-label="Close">×</button></div>
+<div class="am-bar" id="ambar"><span id="ambartxt">India's fastest expense tracker is free</span><a id="ambarlink" href="https://play.google.com/store/apps/details?id=com.techburner.aboutmoney&referrer=utm_source%3Drechargepicker%26utm_medium%3Dwebsite" target="_blank" rel="noopener">Get AboutMoney</a><button type="button" id="amx" aria-label="Close">×</button></div>
 
 <script>
 {
@@ -501,7 +507,11 @@ const USEL=[[0,'Calls only','Just calls and SMS, almost no data.'],[1,'Light','W
 const S={st:'',gb:1.5,val:'any',ops:Object.keys(OPS),g5:false,ott:false,cap:false,cur:'',sim2:'',pmin:0,pmax:0,mode:'best',sort:'pm',dir:1,hrs:[1,0.5,0.25,1,0.5,0],amx:false};
 // usage calculator: label, hint, GB per hour
 const USE=[['Reels and shorts','Instagram, YouTube Shorts',1],['YouTube, OTT on phone','standard quality',0.7],['Video calls','WhatsApp, Meet',0.3],['Social feeds, browsing, maps','',0.15],['Music streaming','',0.1],['Hotspot to a laptop','',1]];
-const PLAY='https://play.google.com/store/apps/details?id=com.techburner.aboutmoney',IOS='https://apps.apple.com/in/app/aboutmoney-expense-tracker/id6771859753';
+// Google Analytics 4: paste your Measurement ID between the quotes, e.g. 'G-AB12CD34EF'
+const GA_ID='';
+const track=(n,o)=>{try{if(window.gtag)window.gtag('event',n,o||{})}catch(e){}};
+if(GA_ID){window.dataLayer=window.dataLayer||[];window.gtag=function(){window.dataLayer.push(arguments)};window.gtag('js',new Date());window.gtag('config',GA_ID);const g=document.createElement('script');g.async=true;g.src='https://www.googletagmanager.com/gtag/js?id='+GA_ID;document.head.appendChild(g)}
+const PLAY='https://play.google.com/store/apps/details?id=com.techburner.aboutmoney&referrer=utm_source%3Drechargepicker%26utm_medium%3Dwebsite',IOS='https://apps.apple.com/in/app/aboutmoney-expense-tracker/id6771859753';
 const isIOS=/iPhone|iPad|iPod/.test(navigator.userAgent);
 try{Object.assign(S,JSON.parse(localStorage.getItem('rpp3')||'{}'))}catch(e){}
 if(!S.v4){S.mode='best';S.v4=1}
@@ -597,6 +607,7 @@ function render(){
   $('ambar').hidden=!!S.amx;
   $('s2').innerHTML='';$('amcardh').textContent='Track this recharge in AboutMoney';$('amhook').textContent='Recharge sorted. Now the rest of your money.';
 
+  lastBest=null;
   if(!rc){
     $('opwarn').textContent='';
     $('pick').innerHTML='<div class="empty"><h2>First, which state are you in?</h2><p class="sub" style="font-size:15px">Choose it at the top of the form. Network quality, 5G and many plans depend on where you live, so the pick changes by state.</p></div>';
@@ -616,6 +627,7 @@ function render(){
     $('pick').innerHTML='<div class="empty"><h2>No plan matches all of that</h2><p class="sub" style="font-size:15px">Try a wider price range, another recharge period, more operators, or less daily data.</p></div>';
     $('rows').innerHTML='';$('rankh').textContent='';
   }else{
+    lastBest=best;
     const r=nr.rank(best.op),cheapest=list[0];
     let save='';
     if(S.mode==='best'&&cheapest.id!==best.id){
@@ -637,6 +649,7 @@ function render(){
     }
     const wk=weakNet(best.op,nr,rc),tr=traps(best,rc);
     $('pick').innerHTML=`<div class="voucher"><div class="v-main">
+      <div class="ribbon">★ Our pick for you</div>
       <div class="v-op"><span class="dot" style="background:${OPS[best.op]}"></span>${esc(best.op)} prepaid · ${S.mode==='net'?'best network pick':S.mode==='best'?'best overall pick':'lowest price pick'} <span class="tag${r===1?' t1':''}">${RANKTXT[r]}</span>${best.chk?' <span class="tag chk">Check in app</span>':''}</div>
       <div class="fig-num">${rs(best.price)}</div>
       <div class="v-per">works out to <strong>${rs(best.pm)} a month</strong></div>
@@ -655,6 +668,7 @@ function render(){
       <button type="button" class="copy" id="cp">Copy this plan</button>`;
     $('cp').onclick=()=>{
       const t=`${best.op} ₹${best.price} · ${valTxt(best.days)} · ${dataTxt(best)} · ${best.calls==='u'?'unlimited calls':best.ott}${u5(best,rc)?' · unlimited 5G':''} (₹${best.pm}/month, ${RANKTXT[r].toLowerCase()} in ${stName()})`;
+      track('copy_plan',{operator:best.op,price:best.price});
       navigator.clipboard.writeText(t).then(()=>{$('cp').textContent='Copied'},()=>{$('cp').textContent='Copy failed'});
       setTimeout(()=>{const c=$('cp');if(c)c.textContent='Copy this plan'},1800);
     };
@@ -679,24 +693,34 @@ function render(){
   renderTable(rc,nr);
 }
 
+let lastBest=null;
 function renderTable(rc,nr){
   const shown=P.filter(p=>avail(p,rc)||!rc);
   $('allh').textContent=rc?`All ${shown.length} plans sold in ${stName()}, with network rank`:`All ${P.length} plans in this list`;
   const val=p=>S.sort==='nr'?(nr?nr.rank(p.op):0):S.sort==='u5'?(u5(p,rc)?0:1):S.sort==='s'?p.s:p[S.sort];
   const sorted=[...shown].sort((a,b)=>{const x=val(a),y=val(b);return (typeof x==='string'?x.localeCompare(y):x-y)*S.dir||a.pm-b.pm});
   const rows=S.all?sorted:sorted.slice(0,25);
+  if(lastBest&&!rows.some(p=>p.id===lastBest.id)&&shown.some(p=>p.id===lastBest.id))rows.unshift(lastBest);
   $('showall').hidden=sorted.length<=25;$('showall').textContent=S.all?'Show fewer':`Show all ${sorted.length} plans`;
   $('tbl').tBodies[0].innerHTML=rows.map(p=>{
     const ok=rc&&fits(p,rc);
     const g5=p.op==='BSNL'?'4G only':p.op==='Vi'?(p.price>=299&&hasData(p)?(rc?(u5(p,rc)?'Unlimited':'No Vi 5G here'):'In Vi 5G cities'):'–'):p.u5raw?'Unlimited':'–';
-    return `<tr class="${ok?'':'off'}"><td data-l="Operator"><span class="dot" style="background:${OPS[p.op]};margin-right:6px"></span>${esc(p.op)}</td><td class="n" data-l="Price">${rs(p.price)}</td><td class="n" data-l="Validity">${valTxt(p.days)}</td><td data-l="Data">${esc(dataTxt(p))}</td><td class="n" data-l="Per month">${rs(p.pm)}</td><td data-l="Network here">${nr?`<span class="tag${nr.rank(p.op)===1?' t1':''}">${RANKTXT[nr.rank(p.op)]}</span>`:'Pick a state'}</td><td data-l="5G">${g5}</td><td data-l="Extras">${esc(p.ott||'–')}${p.rg&&!rc?' · some states only':''}</td><td data-l="Source">${srcLink(p)}${p.chk?' <span class="tag chk">Check in app</span>':''}</td></tr>`}).join('');
+    const pk=lastBest&&p.id===lastBest.id;
+    return `<tr class="${pk?'pickrow':ok?'':'off'}"><td data-l="Operator"><span class="dot" style="background:${OPS[p.op]};margin-right:6px"></span>${esc(p.op)}${pk?' <span class="tag t1">Our pick</span>':''}</td><td class="n" data-l="Price">${rs(p.price)}</td><td class="n" data-l="Validity">${valTxt(p.days)}</td><td data-l="Data">${esc(dataTxt(p))}</td><td class="n" data-l="Per month">${rs(p.pm)}</td><td data-l="Network here">${nr?`<span class="tag${nr.rank(p.op)===1?' t1':''}">${RANKTXT[nr.rank(p.op)]}</span>`:'Pick a state'}</td><td data-l="5G">${g5}</td><td data-l="Extras">${esc(p.ott||'–')}${p.rg&&!rc?' · some states only':''}</td><td data-l="Source">${srcLink(p)}${p.chk?' <span class="tag chk">Check in app</span>':''}</td></tr>`}).join('');
   for(const th of $('tbl').tHead.rows[0].cells){if(th.dataset.k===S.sort)th.setAttribute('aria-sort',S.dir>0?'ascending':'descending');else th.removeAttribute('aria-sort')}
 }
 
-$('st').addEventListener('change',e=>{S.st=e.target.value;render()});
+$('st').addEventListener('change',e=>{S.st=e.target.value;render();track('select_state',{state:stName()});if(lastBest)track('plan_recommended',{state:stName(),operator:lastBest.op,price:lastBest.price})});
+document.addEventListener('click',e=>{const a=e.target.closest('a');if(!a)return;const h=a.href||'',w=a.id||(a.closest('[id]')||{}).id||'';
+  if(h.includes('play.google.com'))track('store_click',{store:'google_play',placement:w});
+  else if(h.includes('apps.apple.com'))track('store_click',{store:'app_store',placement:w});
+  else if(h.includes('/reel/'))track('reel_click',{placement:w});
+  else if(h.includes('instagram.com'))track('instagram_click',{placement:w});
+  else if(a.getAttribute('href')==='#aboutmoney')track('promo_click',{placement:w});
+  else if(a.closest('td[data-l=Source]')||a.closest('.why')||a.closest('.sim2'))track('source_click',{placement:w});});
 $('gb').addEventListener('input',e=>{S.gb=+e.target.value;render()});
 $('valr').addEventListener('input',e=>{S.val=VALS[+e.target.value];render()});
-$('mode').addEventListener('click',e=>{const b=e.target.closest('button');if(b){S.mode=b.dataset.v;render()}});
+$('mode').addEventListener('click',e=>{const b=e.target.closest('button');if(b){S.mode=b.dataset.v;render();track('pick_mode',{mode:S.mode})}});
 $('ops').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const o=b.dataset.v;S.ops=S.ops.includes(o)?S.ops.filter(x=>x!==o):[...S.ops,o];render()});
 $('g5').addEventListener('change',e=>{S.g5=e.target.checked;render()});
 $('ott').addEventListener('change',e=>{S.ott=e.target.checked;render()});
@@ -712,7 +736,7 @@ $('f').addEventListener('submit',e=>e.preventDefault());
 $('tbl').tHead.addEventListener('click',e=>{const th=e.target.closest('th');if(!th)return;const k=th.dataset.k;if(S.sort===k)S.dir=-S.dir;else{S.sort=k;S.dir=1}render()});
 try{const h=location.hostname;if(/^https?:$/.test(location.protocol)&&h&&!/claude|anthropic|localhost|usercontent/.test(h)){$('reel').innerHTML='<p style="font-weight:600;margin:0 0 10px;font-size:15px">See AboutMoney in action</p><div class="reel-frame"><iframe src="https://www.instagram.com/reel/DaSx9X-AB8B/embed/" title="AboutMoney reel on Instagram" loading="lazy" allow="encrypted-media; picture-in-picture" scrolling="no"></iframe></div><a class="reel-link" href="https://www.instagram.com/reel/DaSx9X-AB8B/" target="_blank" rel="noopener">Open on Instagram ↗</a>'}}catch(e){}
 try{if(window.matchMedia&&window.matchMedia('(min-width:861px)').matches)$('more').open=true}catch(e){}
-$('showall').addEventListener('click',()=>{S.all=!S.all;render()});
+$('showall').addEventListener('click',()=>{S.all=!S.all;render();if(S.all)track('show_all_plans')});
 render();
 }
 </script>
