@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recharge Plan Picker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE a money tool from a careful product team: calm, exact, confident
+   IDEA the recharge receipt you get at the counter, torn along its perforation
+   PICTURE the winning plan as a large receipt with notches and a dark stub, then a network leaderboard with real score bars
+   COLOUR white page, grey work surface, near-black ink, one red (AboutMoney's colour) for winners and calls to action
+   TYPE Geist 600 tight for titles and figures, Geist 400 for text
+   LAYOUT nav, title with fact strip, controls left and results right on grey, red AboutMoney band, plan table, footer; one column on phones */
+:root{color-scheme:light dark;--bg:light-dark(#ffffff,#0c0c0e);--sf:light-dark(#f4f4f2,#141417);--card:light-dark(#ffffff,#1b1b1f);--ink:light-dark(#0b0b0c,#f4f4f5);--mute:light-dark(#5c5c62,#a3a3ab);--line:light-dark(#e4e4e0,#2b2b31);--red:#e11d2e;--redsoft:light-dark(#fdecee,#3b161b);--shadow:light-dark(0 1px 2px rgba(15,15,20,.06),0 1px 2px rgba(0,0,0,.4))}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html,body{margin:0}
+html{scroll-padding-top:76px}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 Geist,system-ui,-apple-system,"Segoe UI",sans-serif;overflow-x:clip;padding-bottom:72px;-webkit-font-smoothing:antialiased}
+h1,h2,.fig-num,.facts b{letter-spacing:-.03em;font-weight:600}
+h1{font-size:clamp(34px,4.4vw,54px);line-height:1.02;margin:0 0 14px;max-width:16ch;text-wrap:balance}
+h2{font-size:21px;line-height:1.2;margin:0 0 14px}
+a{color:inherit}
+.wrap{max-width:1240px;margin:0 auto}
+.band{padding:clamp(28px,4.5vw,64px) max(5vw,16px)}
+.sub{font-size:13px;color:var(--mute);margin:6px 0 0}
+
+.nav{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:0 max(5vw,16px)}
+.navin{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:60px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:600;text-decoration:none;font-size:17px;letter-spacing:-.01em}
+.mark{width:22px;height:22px;border-radius:7px;background:var(--ink);position:relative;flex:none}
+.mark::after{content:"";position:absolute;right:-3px;top:-3px;width:9px;height:9px;border-radius:50%;background:var(--red);border:2px solid var(--bg)}
+.nav nav{display:flex;align-items:center;gap:6px}
+.nav nav a{text-decoration:none;font-size:15px;color:var(--mute);padding:8px 12px;border-radius:999px;min-height:40px;display:inline-flex;align-items:center}
+.nav nav a:hover{color:var(--ink)}
+.nav nav a.navcta{background:var(--red);color:#fff;font-weight:600}
+
+.hero{padding-block:clamp(28px,4vw,52px) clamp(24px,3vw,40px)}
+.heroin{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:clamp(24px,4vw,64px);align-items:end}
+.lede{color:var(--mute);margin:0;max-width:60ch;font-size:18px;line-height:1.5}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.facts>div{background:var(--card);padding:16px 18px}
+.facts b{display:block;font-size:30px;line-height:1.1;font-variant-numeric:tabular-nums}
+.facts span{font-size:14px;color:var(--mute)}
+
+.work{background:var(--sf);border-block:1px solid var(--line)}
+.main{display:grid;grid-template-columns:minmax(0,360px) minmax(0,1fr);gap:clamp(20px,2.6vw,36px);align-items:start}
+.panel,.card{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow)}
+.panel{padding:22px}
+.card{padding:22px;margin-top:18px}
+.card:empty{display:none}
+.ctl+.ctl{border-top:1px solid var(--line);margin-top:20px;padding-top:20px}
+.lab{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-weight:600;font-size:15px;margin-bottom:10px}
+.lab b{font-size:22px;font-weight:600;letter-spacing:-.02em;white-space:nowrap;font-variant-numeric:tabular-nums}
+.q .lab{font-size:17px}
+.q select{min-height:54px;font-size:17px;border:1.5px solid var(--ink);font-weight:500}
+
+.seg{display:grid;grid-template-columns:repeat(auto-fit,minmax(6.5em,1fr));gap:4px;background:var(--sf);border:1px solid var(--line);padding:4px;border-radius:14px}
+.seg button{font:500 14px Geist,sans-serif;min-height:40px;padding:6px 10px;border:0;border-radius:10px;background:transparent;color:var(--mute);cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--card);color:var(--ink);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:500 14px Geist,sans-serif;min-height:40px;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;gap:7px}
+.chip:hover{border-color:var(--mute)}
+.chip[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:32px;background:transparent;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:999px;background:var(--line)}
+input[type=range]::-moz-range-track{height:6px;border-radius:999px;background:var(--line)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;margin-top:-9px;border-radius:50%;background:var(--ink);border:4px solid var(--card);box-shadow:0 0 0 1px var(--ink)}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--ink);border:4px solid var(--card);box-shadow:0 0 0 1px var(--ink)}
+.ticks{display:flex;justify-content:space-between;font-size:13px;color:var(--mute);font-variant-numeric:tabular-nums}
+.tog{display:flex;gap:12px;align-items:center;min-height:44px;font-size:15px;cursor:pointer}
+.tog input{width:20px;height:20px;accent-color:var(--ink);flex:none}
+select{font:16px Geist,sans-serif;width:100%;min-height:46px;padding:8px 12px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+
+.more summary{cursor:pointer;font-weight:600;font-size:15px;min-height:44px;display:flex;flex-direction:column;justify-content:center}
+.more[open] summary{margin-bottom:6px}
+.more .ctl{border-top:1px solid var(--line);margin-top:16px;padding-top:16px}
+.showall{margin-top:16px;font:600 15px Geist,sans-serif;min-height:46px;padding:8px 20px;border-radius:999px;border:1px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.prow{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:8px;align-items:center;margin-top:10px;font-size:14px;color:var(--mute)}
+.prow label{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:12px;padding:0 10px;background:var(--card);min-height:44px}
+.prow input{font:16px Geist,sans-serif;width:100%;border:0;background:transparent;color:var(--ink);min-height:40px;font-variant-numeric:tabular-nums}
+.prow input:focus{outline:none}
+.prow label:focus-within{outline:3px solid var(--red);outline-offset:2px}
+.calc{margin-top:12px;border:1px solid var(--line);border-radius:14px;padding:2px 14px;background:var(--sf)}
+.calc summary{cursor:pointer;font-weight:600;font-size:15px;min-height:44px;display:flex;align-items:center}
+.crow{display:grid;grid-template-columns:minmax(0,1fr) 5.2em;gap:10px;align-items:center;padding:5px 0;font-size:14px}
+.crow small{display:block;color:var(--mute);font-size:13px}
+.crow input{font:16px Geist,sans-serif;width:100%;min-height:40px;padding:6px 8px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);text-align:right;font-variant-numeric:tabular-nums}
+.cout{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:10px 0;font-weight:500}
+.cout b{font-size:22px;font-weight:600;letter-spacing:-.02em}
+.mini{font:600 14px Geist,sans-serif;min-height:40px;padding:6px 16px;border-radius:999px;border:0;background:var(--ink);color:var(--bg);cursor:pointer}
+
+.voucher{background:var(--card);border-radius:22px;border:1px solid var(--line);overflow:hidden;box-shadow:var(--shadow)}
+.v-main{padding:clamp(20px,3vw,32px)}
+.v-op{display:flex;align-items:center;gap:8px;font-weight:500;color:var(--mute);font-size:14px;flex-wrap:wrap}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;flex:none}
+.fig-num{font-size:clamp(56px,8vw,92px);line-height:.95;margin:14px 0 8px;font-variant-numeric:tabular-nums}
+.v-per{font-size:18px;color:var(--mute)}
+.v-per strong{color:var(--ink);font-weight:600}
+.v-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(9em,1fr));gap:14px 20px;margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}
+.v-grid div{font-size:13px;color:var(--mute)}
+.v-grid span{display:block;font-size:16px;color:var(--ink);font-weight:500;margin-top:2px}
+.stub{position:relative;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;background:var(--ink);color:var(--bg);padding:18px clamp(20px,3vw,32px)}
+.stub::before,.stub::after{content:"";position:absolute;top:-11px;width:22px;height:22px;border-radius:50%;background:var(--sf);border:1px solid var(--line)}
+.stub::before{left:-12px}.stub::after{right:-12px}
+.stub small{font-size:14px;opacity:.75}
+.stub .y{font-size:26px;font-weight:600;letter-spacing:-.02em;white-space:nowrap;font-variant-numeric:tabular-nums}
+.why{margin:16px 2px 0;font-size:15px;color:var(--mute);max-width:70ch}
+.save{margin-top:12px;padding:14px 16px;border-radius:14px;background:var(--card);border:1px solid var(--line);font-size:15px}
+.save:empty{display:none}
+.copy{margin-top:14px;font:600 15px Geist,sans-serif;min-height:44px;padding:8px 18px;border-radius:999px;border:1px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.copy:hover{background:var(--ink);color:var(--bg)}
+.tag{display:inline-block;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--sf);border:1px solid var(--line);color:var(--ink);white-space:nowrap}
+.tag.t1{background:var(--red);border-color:var(--red);color:#fff}
+.tag.chk{background:transparent;border-style:dashed;color:var(--mute);font-weight:500}
+.empty{padding:clamp(24px,4vw,40px);background:var(--card);border:1px dashed var(--mute);border-radius:22px}
+.empty h2{font-size:clamp(24px,3vw,32px)}
+
+.sim2{margin-top:14px;padding:16px 18px;border-radius:16px;border:1px solid var(--line);background:var(--card);font-size:15px}
+.sim2:empty{display:none}
+.am-card{display:grid;grid-template-columns:46px minmax(0,1fr) auto;gap:14px;align-items:center;margin-top:14px;padding:14px 18px;border-radius:16px;background:var(--red);color:#fff;text-decoration:none}
+.am-card:hover{filter:brightness(1.06)}
+.am-ico{width:46px;height:46px;border-radius:13px;background:#fff;color:var(--red);display:grid;place-items:center;font-weight:700;font-size:22px}
+.am-card b{display:block;font-size:16px;font-weight:600}
+.am-card span{font-size:14px;opacity:.9}
+.am-card em{font-style:normal;font-weight:600;font-size:14px;background:#fff;color:var(--red);padding:8px 14px;border-radius:999px;white-space:nowrap}
+
+.nrow{display:grid;grid-template-columns:24px minmax(0,6.5em) minmax(0,1fr);gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
+.nrow .rk{font-weight:600;font-size:18px;font-variant-numeric:tabular-nums;color:var(--mute)}
+.nrow.top .rk{color:var(--red)}
+.nrow .on{font-weight:600;white-space:nowrap;display:flex;align-items:center;gap:8px}
+.nb{height:8px;border-radius:999px;background:var(--sf);border:1px solid var(--line);overflow:hidden}
+.nb i{display:block;height:100%;background:var(--mute);border-radius:999px}
+.nrow.top .nb i{background:var(--red)}
+.nrow .w{grid-column:3;font-size:13px;color:var(--mute);margin-top:-4px}
+.row{display:grid;grid-template-columns:minmax(0,13em) minmax(0,1fr) 5.6em;gap:12px;align-items:center;padding:9px 0;border-top:1px solid var(--line);font-size:15px}
+.row .nm{display:flex;gap:8px;align-items:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar{height:10px;border-radius:999px;background:var(--sf);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:999px;background:color-mix(in srgb,var(--ink) 35%,transparent)}
+.row.win .bar i{background:var(--red)}
+.row.win .nm{font-weight:600}
+.val{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:600}
+.rank:has(#rows:empty){display:none}
+
+.am-band{background:var(--red);color:#fff}
+.am-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(24px,4vw,56px);align-items:center}
+.am-name{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 18px;font-weight:600;font-size:18px}
+.am-logo{width:44px;height:44px;border-radius:13px;background:#fff;color:var(--red);display:grid;place-items:center;font-weight:700;font-size:22px}
+.am-name .pill{font-weight:500;opacity:.9;font-size:15px;padding:4px 12px;border:1px solid rgba(255,255,255,.5);border-radius:999px}
+.am-band h2{font-size:clamp(34px,4.6vw,56px);line-height:1.02;margin:0 0 16px;max-width:14ch;text-wrap:balance}
+.am-band p{margin:0 0 22px;max-width:52ch;font-size:17px;opacity:.95}
+.am-hook{font-weight:600;margin-bottom:14px;font-size:15px;opacity:.95}
+.am-btns{display:flex;flex-wrap:wrap;gap:10px}
+.am-btn{display:inline-flex;align-items:center;gap:8px;min-height:54px;padding:10px 22px;border-radius:14px;font-weight:600;font-size:16px;text-decoration:none;background:#fff;color:#0b0b0c}
+.am-btn.alt{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.75)}
+.am-btn:hover{filter:brightness(.96)}
+.am-feats{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.am-feats li{display:grid;grid-template-columns:34px minmax(0,1fr);gap:14px;padding:16px;border-radius:16px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18)}
+.am-feats i{font-style:normal;width:34px;height:34px;border-radius:10px;background:#fff;color:var(--red);display:grid;place-items:center;font-weight:700}
+.am-feats b{display:block;font-weight:600}
+.am-feats span{font-size:14px;opacity:.9}
+.am-small{font-size:13px;opacity:.85;margin-top:16px!important}
+.reel{margin-bottom:18px}
+.reel-poster{display:grid;grid-template-columns:64px minmax(0,1fr);gap:16px;align-items:center;padding:18px;border-radius:18px;background:#0b0b0c;color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.2)}
+.reel-poster:hover .reel-play{transform:scale(1.06)}
+.reel-play{width:64px;height:64px;border-radius:50%;background:#fff;color:var(--red);display:grid;place-items:center;transition:transform .2s}
+.reel-play svg{width:28px;height:28px;margin-left:3px}
+.reel-txt b{display:block;font-size:17px;font-weight:600}
+.reel-txt span{font-size:14px;opacity:.8}
+.reel-frame{background:#fff;border-radius:18px;overflow:hidden;width:100%;max-width:380px;height:620px;margin-bottom:8px}
+.reel-frame iframe{display:block;width:100%;height:100%;border:0}
+.reel-link{display:inline-flex;align-items:center;min-height:44px;color:#fff;font-weight:600;font-size:15px}
+.shots{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px 8px}
+.shots:empty{display:none}
+.shots img{flex:none;width:min(220px,60vw);border-radius:28px;border:6px solid #0b0b0c;scroll-snap-align:start;background:#0b0b0c}
+
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-size:13px;color:var(--mute);font-weight:500;padding:10px 10px;border-bottom:1px solid var(--ink);cursor:pointer;white-space:nowrap}
+th[aria-sort]{color:var(--ink);font-weight:600}
+td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr:hover td{background:var(--sf)}
+td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+th.n{text-align:right}
+tr.off td{color:var(--mute)}
+tr.off td .tag{opacity:.6}
+td a{color:var(--mute)}
+.note{font-size:13px;color:var(--mute);margin-top:18px;max-width:84ch}
+
+.foot{border-top:1px solid var(--line)}
+.foot-in{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+.foot b{display:block;font-size:20px;font-weight:600;letter-spacing:-.02em}
+.foot span{font-size:14px;color:var(--mute)}
+.ig{display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:10px 20px;border-radius:999px;border:1px solid var(--ink);text-decoration:none;font-weight:600}
+.ig:hover{background:var(--ink);color:var(--bg)}
+.ig svg{width:20px;height:20px}
+
+.am-bar{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;padding:10px max(16px,env(safe-area-inset-left,0px));background:var(--red);color:#fff;font-weight:500;font-size:15px}
+.am-bar a{background:#fff;color:#0b0b0c;padding:8px 18px;border-radius:999px;text-decoration:none;font-weight:600;min-height:40px;display:inline-flex;align-items:center}
+.am-bar button{background:transparent;border:0;color:#fff;font-size:24px;min-width:44px;min-height:44px;cursor:pointer}
+.am-bar[hidden]{display:none}
+
+@media(max-width:860px){.heroin{grid-template-columns:minmax(0,1fr)}.main{grid-template-columns:minmax(0,1fr)}.am-grid{grid-template-columns:minmax(0,1fr)}.nav nav a:not(.navcta){display:none}}
+@media(max-width:600px){.am-bar span{display:none}.facts>div{padding:12px 14px}.facts b{font-size:24px}.am-card{grid-template-columns:46px minmax(0,1fr)}.am-card em{display:none}.row{grid-template-columns:minmax(0,9em) minmax(0,1fr) 4.8em;font-size:14px}table{font-size:13px}th,td{padding:6px 4px}.stack thead{display:none}.stack tr{display:grid;padding-block:10px;border-bottom:1px solid var(--line)}.stack td{display:flex;justify-content:space-between;gap:12px;border:0;padding:3px 0;text-align:right}.stack td::before{content:attr(data-l);color:var(--mute);text-align:left}.nrow{grid-template-columns:22px minmax(0,5.5em) minmax(0,1fr)}}
+@media(prefers-reduced-motion:no-preference){.bar i,.nb i{transition:width .4s ease}}
+</style>
+</head>
+<body id="top">
+<header class="nav"><div class="wrap navin">
+<a class="brand" href="#top"><span class="mark"></span>Recharge Picker</a>
+<nav><a href="#picker">Find a plan</a><a href="#plans">All plans</a><a class="navcta" href="#aboutmoney">Get AboutMoney</a></nav>
+</div></header>
+
+<section class="band hero"><div class="wrap heroin">
+<div>
+<h1>Find the cheapest recharge that works where you live</h1>
+<p class="lede">Pick your state and how much data you use. It compares every prepaid plan from Jio, Airtel, Vi and BSNL, ranks the networks in your state, and shows the plan that costs least per month.</p>
+</div>
+<div class="facts">
+<div><b id="cnt">143</b><span>prepaid plans checked</span></div>
+<div><b>4</b><span>operators compared</span></div>
+<div><b>22</b><span>regions with network rankings</span></div>
+<div><b>Nov 2026</b><span>last checked, refreshed monthly</span></div>
+</div>
+</div></section>
+
+<section class="band work" id="picker"><div class="wrap main">
+<form class="panel" id="f" autocomplete="off">
+<div class="ctl q">
+<div class="lab"><label for="st">Which state are you in?</label></div>
+<select id="st"></select>
+<p class="sub">Network quality and some plans change by state.</p>
+</div>
+<div class="ctl">
+<div class="lab">Pick the plan by</div>
+<div class="seg" id="mode">
+<button type="button" data-v="price">Lowest price</button>
+<button type="button" data-v="net">Best network here</button>
+</div>
+</div>
+<div class="ctl">
+<div class="lab">How do you use your phone?</div>
+<div class="chips" id="presets">
+<button type="button" class="chip" data-v="0">Calls only</button>
+<button type="button" class="chip" data-v="1">Light</button>
+<button type="button" class="chip" data-v="1.5">Regular</button>
+<button type="button" class="chip" data-v="2">Heavy</button>
+<button type="button" class="chip" data-v="3">Binge</button>
+</div>
+<p class="sub">Light: WhatsApp, maps. Regular: about an hour of reels or YouTube a day. Heavy: 2 to 3 hours of video. Binge: hotspot and HD streaming.</p>
+<details class="calc" id="calc"><summary>Not sure? Work it out from your day</summary>
+<p class="sub" style="margin:0 0 6px">Hours a day on mobile data, not Wi-Fi.</p>
+<div id="crows"></div>
+<div class="cout"><span>About <b id="cgb">0 GB</b> a day</span><button type="button" class="mini" id="cuse">Use this</button></div>
+<p class="sub" style="margin-bottom:10px">Netflix says standard quality uses up to 0.7 GB an hour. Reels, calls and browsing figures are third-party estimates. A 10% buffer is added for app updates and background use.</p>
+</details>
+</div>
+<div class="ctl">
+<div class="lab"><label for="gb">Data you need each day</label><b id="gbv">1.5 GB</b></div>
+<input type="range" id="gb" min="0" max="4" step="0.5" value="1.5">
+<div class="ticks"><span>0</span><span>1</span><span>2</span><span>3</span><span>4 GB</span></div>
+</div>
+<div class="ctl">
+<div class="lab">Recharge how often?</div>
+<div class="seg" id="val">
+<button type="button" data-v="any">Any</button>
+<button type="button" data-v="m">Monthly</button>
+<button type="button" data-v="q">2–3 months</button>
+<button type="button" data-v="y">Yearly</button>
+</div>
+</div>
+<div class="ctl">
+<div class="lab">Recharge price <b id="prv">Any</b></div>
+<div class="chips" id="prc">
+<button type="button" class="chip" data-v="0-99999">Any</button>
+<button type="button" class="chip" data-v="0-300">Under ₹300</button>
+<button type="button" class="chip" data-v="300-600">₹300–600</button>
+<button type="button" class="chip" data-v="600-1200">₹600–1,200</button>
+<button type="button" class="chip" data-v="1200-99999">₹1,200+</button>
+</div>
+<div class="prow"><label for="pmin">Min ₹<input type="number" id="pmin" min="0" step="10" inputmode="numeric" placeholder="0"></label><span>to</span><label for="pmax">Max ₹<input type="number" id="pmax" min="0" step="10" inputmode="numeric" placeholder="No limit"></label></div>
+<p class="sub">The amount you pay at recharge, not the monthly cost.</p>
+</div>
+<details class="ctl more" id="more"><summary>More options <span class="sub" style="margin:0">operators, 5G, OTT, second SIM</span></summary>
+<div class="ctl">
+<div class="lab">Operators to compare</div>
+<div class="chips" id="ops"></div>
+</div>
+<div class="ctl">
+<label class="tog"><input type="checkbox" id="g5"> I have a 5G phone and 5G works where I live</label>
+<label class="tog"><input type="checkbox" id="ott"> I want an OTT app included</label>
+<label class="tog"><input type="checkbox" id="cap"> Limited calling is fine</label>
+</div>
+<div class="ctl">
+<div class="lab"><label for="cur">Your current operator</label></div>
+<select id="cur"><option value="">Don't show savings</option></select>
+</div>
+<div class="ctl">
+<div class="lab"><label for="sim2">Second SIM to keep active</label></div>
+<select id="sim2"><option value="">I don't have a second SIM</option></select>
+<p class="sub">It finds the cheapest way to keep that number running and adds it to your total.</p>
+</div>
+</details>
+</form>
+
+<div class="res">
+<div id="pick"></div>
+<div class="sim2" id="s2"></div>
+<a class="am-card" id="amcard" href="#aboutmoney"><div class="am-ico">₹</div><div><b id="amcardh">Track this recharge in AboutMoney</b><span>India's fastest expense tracker. Share a payment screenshot and it's logged.</span></div><em>Get the app</em></a>
+<div class="card net" id="net"></div>
+<div class="card rank">
+<h2 id="rankh">Every plan that fits, by monthly cost</h2>
+<div id="rows"></div>
+<p class="sub">Monthly cost = price ÷ validity days × 30, so a 28-day and an 84-day plan compare fairly.</p>
+</div>
+</div>
+</div></section>
+
+<section class="band am-band" id="aboutmoney"><div class="wrap am-grid">
+<div>
+<p class="am-name"><span class="am-logo">₹</span>AboutMoney <span class="pill">India's fastest expense tracker</span></p>
+<div class="am-hook" id="amhook">Recharge sorted. Now the rest of your money.</div>
+<h2>Track expenses with privacy, in seconds</h2>
+<p>Recharges, Swiggy orders, EMIs, that UPI payment you forgot about. AboutMoney uses AI to log your spending for you, so you never type it in again.</p>
+<div class="am-btns" id="ambtns"></div>
+<p class="am-small">Free to download, with optional Premium. Android and iPhone. Built for India: rupees, UPI and Indian tax rules.</p>
+</div>
+<div>
+<div class="reel" id="reel">
+<a class="reel-poster" id="reelposter" href="https://www.instagram.com/reel/DaSx9X-AB8B/" target="_blank" rel="noopener">
+<span class="reel-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg></span>
+<span class="reel-txt"><b>See AboutMoney in action</b><span>Watch the reel on Instagram ↗</span></span>
+</a>
+</div>
+<div class="shots" id="shots"></div>
+<ul class="am-feats">
+<li><i>1</i><div><b>Share a screenshot, it's logged</b><span>Share a UPI or bank payment screen and the AI pulls out the amount, merchant, date and category.</span></div></li>
+<li><i>2</i><div><b>A month in seconds</b><span>Import a PDF bank statement and every transaction comes in at once.</span></div></li>
+<li><i>3</i><div><b>Never miss a due date</b><span>The Bills & Payment Planner gives you a heads-up before bills, EMIs and subscriptions are due.</span></div></li>
+<li><i>4</i><div><b>Split with friends, plan your taxes</b><span>Track shared bills in groups, and compare old vs new tax regimes.</span></div></li>
+<li><i>5</i><div><b>No bank login needed</b><span>Works without linking your bank account or sharing internet banking passwords.</span></div></li>
+</ul>
+</div>
+</div></section>
+
+<section class="band" id="plans"><div class="wrap">
+<h2 id="allh" style="font-size:clamp(24px,3vw,32px)">All plans</h2>
+<div class="scroll">
+<table class="stack" id="tbl">
+<thead><tr><th data-k="op">Operator</th><th data-k="price" class="n">Price</th><th data-k="days" class="n">Validity</th><th data-k="dd">Data</th><th data-k="pm" class="n" aria-sort="ascending">Per month</th><th data-k="nr">Network here</th><th data-k="u5">5G</th><th data-k="ott">Extras</th><th data-k="s">Source</th></tr></thead>
+<tbody></tbody>
+</table>
+</div>
+<button type="button" class="showall" id="showall" hidden>Show all plans</button>
+<p class="note">Every plan links to where its price and benefits were checked, mostly TelecomTalk's 2026 plan lists, using the newest listing wherever sources disagree. Plans marked "Check in app" have sources that disagree or are older than August 2026. Operators change plans often, so confirm the price in your operator's app before you pay. Data-only add-ons, ISD packs and feature-phone-only plans are left out. Plans sold only in some states appear only when you pick one of those states. Network rankings come from <a href="https://insights.opensignal.com/reports/2026/02/india/mobile-network-experience">Opensignal's February 2026 India report</a>, which names the winning operator in each of 22 regions for reliability, download speed, video, gaming and 5G; signal in your own building can differ. BSNL runs 4G only. Vi gives unlimited 5G on plans from ₹299 only where it has launched 5G.</p>
+</div></section>
+
+<footer class="band foot"><div class="wrap foot-in">
+<div><b>Made by Venkatesh Parik and BurnerBits</b><span>Built to make recharging in India a little less confusing.</span></div>
+<a class="ig" href="https://www.instagram.com/burner.bits/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>Follow @burner.bits</a>
+</div></footer>
+
+<div class="am-bar" id="ambar"><span id="ambartxt">India's fastest expense tracker is free</span><a id="ambarlink" href="https://play.google.com/store/apps/details?id=com.techburner.aboutmoney" target="_blank" rel="noopener">Get AboutMoney</a><button type="button" id="amx" aria-label="Close">×</button></div>
+
+<script>
+{
+const OPS={Jio:'#0a2885',Airtel:'#e40000',Vi:'#f5b800',BSNL:'#f26f21'};
+const RG={AP:'Andhra Pradesh & Telangana',AS:'Assam',BR:'Bihar & Jharkhand',DL:'Delhi NCR',GJ:'Gujarat',HR:'Haryana',HP:'Himachal Pradesh',JK:'Jammu & Kashmir',KA:'Karnataka',KL:'Kerala',KO:'Kolkata',MP:'Madhya Pradesh & Chhattisgarh',MH:'Maharashtra & Goa',MU:'Mumbai',NE:'North East',OD:'Odisha',PB:'Punjab',RJ:'Rajasthan',TN:'Tamil Nadu & Chennai',UE:'UP East',UW:'UP West',WB:'West Bengal'};
+const STATES=[['Andhra Pradesh','AP'],['Arunachal Pradesh','NE'],['Assam','AS'],['Bihar','BR'],['Chandigarh','PB'],['Chennai','TN'],['Chhattisgarh','MP'],['Delhi NCR (incl. Noida, Gurugram)','DL'],['Goa','MH'],['Gujarat','GJ'],['Haryana','HR'],['Himachal Pradesh','HP'],['Jammu & Kashmir, Ladakh','JK'],['Jharkhand','BR'],['Karnataka','KA'],['Kerala','KL'],['Kolkata','KO'],['Madhya Pradesh','MP'],['Maharashtra (rest of state)','MH'],['Manipur','NE'],['Meghalaya','NE'],['Mizoram','NE'],['Mumbai','MU'],['Nagaland','NE'],['Odisha','OD'],['Puducherry','TN'],['Punjab','PB'],['Rajasthan','RJ'],['Sikkim','WB'],['Tamil Nadu (rest of state)','TN'],['Telangana','AP'],['Tripura','NE'],['UP East (Lucknow, Varanasi, Gorakhpur)','UE'],['UP West (Agra, Meerut, Bareilly)','UW'],['Uttarakhand','UW'],['West Bengal (rest of state)','WB'],['Andaman & Nicobar','WB'],['Lakshadweep','KL']];
+// Opensignal Feb 2026 regional winners: reliability, video, games, download, 5G download, 5G video, 5G games (J/A/V, two letters = tie)
+const WIN={AP:'J J A J J V A',AS:'J J V J J J A',BR:'J AJ A J A V V',DL:'J J A J J V A',GJ:'J A V J A V V',HR:'J J A J A V A',HP:'J A A J A A A',JK:'J J A J J A J',KA:'J J A J J V A',KL:'J J A J J V A',KO:'J J A J J A J',MP:'J A A J J V A',MH:'J A A J J A V',MU:'J J V J J V V',NE:'J J V J J J A',OD:'J A V J J A A',PB:'J J V J A AV V',RJ:'A A A J J A A',TN:'J J A J J V A',UE:'J A A J V V V',UW:'J A A J A A A',WB:'J J A J J V V'};
+const MET=['reliability','video','gaming','download speed','5G speed','5G video','5G gaming'],WT=[2,1,1,2,1,.5,.5],L2O={J:'Jio',A:'Airtel',V:'Vi'};
+const VI5G=['AP','BR','DL','GJ','HR','KA','KL','KO','MP','MH','MU','PB','RJ','TN','UE','UW','WB'];
+
+// where each plan was checked
+const SRC=[null,
+['TelecomTalk, Jio 28-day plans, Jun 2026','https://telecomtalk.info/reliance-jio-28day-recharge-plans-june-2026/1008063/'],
+['TelecomTalk, Jio 84-day plans, Apr 2026','https://telecomtalk.info/reliance-jio-84day-validity-prepaid-plans-april2026/1006453/'],
+['TelecomTalk, yearly plans, Nov 2026','https://telecomtalk.info/bharti-airtel-reliance-jio-365days-validity-plans/1013693/'],
+['TelecomTalk, Jio TRAI packs, Nov 2026','https://telecomtalk.info/reliance-jio-trai-mandated-packs-for-november2026/1014023/'],
+['TelecomTalk, Jio youth plans, Nov 2026','https://telecomtalk.info/reliance-jio-youth-and-gaming-plans-november2026/1014248/'],
+['TelecomTalk, Airtel 84-day plans, Apr 2026','https://telecomtalk.info/airtel-84-day-prepaid-recharge-plans-april2026/1006424/'],
+['TelecomTalk, Airtel unlimited plans, Nov 2026','https://telecomtalk.info/airtel-unlimited-4g-5g-data-more-circles/1013658/'],
+['TelecomTalk, Airtel entry plans, Aug 2026','https://telecomtalk.info/airtel-entry-level-unlimited-plans-august-2026/1010873/'],
+['TelecomTalk, voice-only plans, Nov 2026','https://telecomtalk.info/airtel-jio-vi-voice-sms-plans-prepaid/1013453/'],
+['TelecomTalk, Airtel ₹299, Nov 2026','https://telecomtalk.info/bharti-airtel-plan-that-offers-1gb-day/1013928/'],
+['Beebom, Airtel ₹348, 2026','https://gadgets.beebom.com/news/airtel-rs-348-prepaid-plan-launched-in-india'],
+['TelecomTalk, Airtel ₹349, Sep 2026','https://telecomtalk.info/bhartiairtel-recharges-5g-digital-world-september2026-edition/1011516/'],
+['TelecomTalk, Airtel plans, Aug 2025','https://telecomtalk.info/airtel-prepaid-plans-august2025-data-5g-packs/998749/'],
+['Cashify, Airtel plans, Nov 2026','https://www.cashify.in/all-airtel-prepaid-recharge-plans-online'],
+['TelecomTalk, Vi TRAI packs, Nov 2026','https://telecomtalk.info/vodafone-idea-trai-mandated-packs-for-november2026/1014011/'],
+['TelecomTalk, Vi plan changes, 2026','https://telecomtalk.info/vodafone-idea-vi-prepaid-plans-price-hike2026/1006059/'],
+['TelecomTalk, Vi 1GB/day plans, Aug 2026','https://telecomtalk.info/vodafone-idea-prepaid-plans-1gb-daily-data/1010742/'],
+['TelecomTalk, Vi ₹1750, 2026','https://telecomtalk.info/vodafone-idea-rs1750-prepaid-plan-unlimited-data/1010486/'],
+['TelecomTalk, Vi ₹3050, 2026','https://telecomtalk.info/?p=1010435'],
+['Vi blog, yearly plans, 2026','https://www.myvi.in/blog/maximize-savings-with-vi-validity-recharge-for-1-year'],
+['TelecomTalk, Vi Superhero plans, Mar 2026','https://telecomtalk.info/vodafone-idea-superhero-plans-under-rs-400/1005022/'],
+['Vi blog, JioHotstar plans, Nov 2026','https://www.myvi.in/blog/vi-new-disney-plus-hotstar-plans'],
+['Sarkari List, Vi plans, Sep 2026','https://sarkarilist.in/vodafone-idea-recharge-plan-list/'],
+['TelecomTalk, BSNL plans, Aug 2026','https://telecomtalk.info/bsnl-prepaid-recharge-plans-in-august-2026/1010974/'],
+['TelecomTalk, BSNL yearly plans, May 2026','https://telecomtalk.info/bsnl-prepaid-plans-offering-year-indigenous-4g/1007483/'],
+['TelecomTalk, BSNL TRAI packs, Nov 2026','https://telecomtalk.info/bsnl-trai-mandated-packs-for-november-2026/1014081/'],
+['TelecomTalk, BSNL plans, 2025','https://telecomtalk.info/?p=1000158'],
+['Digit, BSNL ₹485','https://www.digit.in/news/telecom/bsnl-rs-485-recharge-plan-benefits-data-limit-validity-and-all-other-details-you-need-to-know.html'],
+['India TV, BSNL ₹997','https://www.indiatvnews.com/technology/news/bsnl-rs-997-recharge-plan-offers-150-days-validity-with-daily-2gb-data-and-unlimited-calling-2025-12-15-1021769'],
+['RechargePlans.in, Jio, Nov 2026','https://rechargeplans.in/mobile/jio/'],
+['TelecomTalk, Jio ₹999, 2026','https://telecomtalk.info/jio-rs-999-plan-what-98-days/1012921/'],
+['TelecomTalk, Jio Happy New Year 2.0, 24 Nov 2026','https://telecomtalk.info/jio-happy-new-year-announced-what-packs/1014280/'],
+['Asianet, Vi ₹859, Feb 2026','https://newsable.asianetnews.com/amp/gallery/technology/jio-vs-airtel-vs-vodafone-idea-who-wins-the-84-day-1-5gb-plan-battle-hsutp7i'],
+['RechargePlans.in, Vi, Nov 2026','https://rechargeplans.in/mobile/vi/']
+];
+
+// circle lists
+const A348=['PB','HR','UE','UW','MP','GJ','MH','KL','WB','KO','OD','MU'];
+const V5=['AS','HP','JK','NE','OD'];
+const V16=['AP','TN','DL','GJ','HR','KA','KL','KO','MP','MH','MU','PB','RJ','UE','UW','WB'];
+const V17=[...V16,'BR'],V470=V16.filter(c=>c!=='RJ'),V1849=V16.filter(c=>c!=='GJ');
+const V345=Object.keys(RG).filter(c=>c!=='AS'&&c!=='OD');
+const V379U=['AP','AS','BR','DL','HP','JK','KA','MP','NE','OD','RJ'],V379D=['TN','KL','KO','MH','GJ','HR','MU','PB','UE','UW','WB'];
+const V649=['DL','GJ','HR','KL','KO','MH','MU','PB','TN','UE','UW','WB'],V5B=['AP','BR','KA','MP','RJ'];
+const VI3599=['TN','DL','GJ','HR','KL','KO','MH','MU','PB','UE','UW','WB'];
+const UA='Unlimited 4G + 5G (fair use 300 GB / 30 days)',UV='Unlimited 4G + 5G (300 GB / 28 days)',UJ='Unlimited 4G + 5G';
+const VO='Voice only, 300 SMS';
+
+// op, price, validity days, GB/day, extra GB total, unlimited 5G (Jio/Airtel), calls u=unlimited l=limited, extras, {s:source, rg:circles, ul:unlimited-data text, chk:sources disagree or older}
+const RAW=[
+['Jio',147,22,0,0,0,'u',VO,{s:4}],['Jio',177,28,0,0,0,'u',VO,{s:4}],['Jio',196,30,0,0,0,'u',VO,{s:4}],['Jio',197,30,0,0,0,'u',VO+', calendar month',{s:4}],
+['Jio',189,28,0,2,0,'u','',{s:1}],['Jio',299,28,1.5,0,0,'u','',{s:1}],['Jio',319,30,1.5,0,0,'u','Calendar month',{s:4}],['Jio',329,28,1.5,0,0,'u','JioSaavn Pro',{s:1}],
+['Jio',339,30,1.5,0,0,'u','Calendar month, ₹14.95 talktime',{s:4}],['Jio',349,28,2,0,1,'u','JioHotstar Mobile (3 months)',{s:1}],['Jio',355,30,0,25,0,'u','',{s:4}],['Jio',365,30,0,25,0,'u','₹7.47 talktime',{s:4}],
+['Jio',399,28,2.5,0,1,'u','JioHotstar Mobile+, FanCode, JioGames',{s:5}],['Jio',399,28,0,0,1,'u','New version from 24 Nov, Canva Pro, JioHotstar',{s:32,ul:UJ,chk:1}],
+['Jio',445,28,2,0,1,'u','SonyLIV, ZEE5 and 8 more OTT apps, JioHotstar',{s:1}],['Jio',449,28,3,0,1,'u','JioHotstar Mobile+ (3 months)',{s:1}],
+['Jio',459,28,2,5,1,'u','Snapchat+, FanCode, JioGames',{s:5}],['Jio',495,28,1.5,5,0,'u','JioGames Cloud, FanCode',{s:5}],['Jio',545,28,2,5,1,'u','JioGames Cloud, FanCode, JioHotstar',{s:5}],
+['Jio',448,84,0,0,0,'u','Voice only, 1000 SMS',{s:4}],['Jio',799,84,1.5,0,0,'u','',{s:2}],['Jio',859,84,2,0,1,'u','JioHotstar Mobile (3 months)',{s:2}],['Jio',889,84,1.5,0,0,'u','JioSaavn Pro',{s:2}],
+['Jio',899,90,2,20,1,'u','',{s:30}],['Jio',949,84,2,0,1,'u','JioHotstar Mobile (3 months)',{s:2}],['Jio',999,98,2,0,1,'u','',{s:31,chk:1}],
+['Jio',1028,84,2,0,1,'u','Swiggy One, JioHotstar, ₹50 cashback',{s:2}],['Jio',1029,84,2,0,1,'u','Amazon Prime Lite, JioHotstar',{s:2}],['Jio',1049,84,2,0,1,'u','SonyLIV, ZEE5, JioHotstar',{s:2}],
+['Jio',1199,84,3,0,1,'u','JioHotstar Mobile (3 months)',{s:2}],['Jio',1299,84,2,0,1,'u','Netflix Mobile, JioHotstar',{s:2}],['Jio',1799,84,3,0,1,'u','Netflix Basic, JioHotstar',{s:2}],
+['Jio',1748,336,0,0,0,'u','Voice only, 3600 SMS',{s:3}],['Jio',3599,365,2.5,120,1,'u','JioHotstar Mobile+, 120 GB booster',{s:3}],['Jio',3999,365,2.5,0,1,'u','FanCode, JioHotstar Mobile+',{s:3}],
+['Jio',3999,365,0,0,1,'u','New version from 24 Nov, FanCode, JioHotstar',{s:32,ul:UJ,chk:1}],['Jio',10000,1095,2.5,0,1,'u','3-year plan, JioHotstar Mobile+',{s:3}],
+
+['Airtel',185,28,0,0,0,'u',VO,{s:9}],['Airtel',203,30,0,0,0,'u',VO,{s:9}],['Airtel',206,30,0,0,0,'u',VO+', 1 month',{s:9}],
+['Airtel',199,28,0,2,0,'u','',{s:8}],['Airtel',219,28,0,3,0,'u','',{s:8}],['Airtel',355,30,0,25,0,'u','',{s:14}],['Airtel',299,28,1,0,0,'u','',{s:10}],
+['Airtel',348,28,2,0,0,'u','',{s:11,rg:A348}],['Airtel',349,28,2,0,1,'u','',{s:12}],['Airtel',379,30,2,0,1,'u','',{s:14}],['Airtel',398,28,2,0,1,'u','JioHotstar Mobile',{s:13,chk:1}],
+['Airtel',399,28,0,0,1,'u','Adobe Express Premium',{s:7,ul:UA}],['Airtel',409,28,2.5,0,1,'u','',{s:13,chk:1}],['Airtel',429,30,2.5,0,1,'u','',{s:13,chk:1}],
+['Airtel',449,28,0,0,1,'u','Xstream Play, Apple Music, Google One',{s:7,ul:UA,chk:1}],['Airtel',598,28,2,0,1,'u','Netflix Basic, JioHotstar',{s:13,chk:1}],
+['Airtel',469,84,0,0,0,'u','Voice only, 900 SMS',{s:6}],['Airtel',489,77,0,6,0,'u','',{s:8}],['Airtel',548,84,0,7,0,'u','',{s:8}],
+['Airtel',899,84,1.5,0,0,'u','',{s:6}],['Airtel',929,90,1.5,0,0,'u','',{s:6}],['Airtel',979,84,2,0,1,'u','Xstream Play Premium',{s:6}],['Airtel',1029,84,2,0,1,'u','JioHotstar Mobile',{s:6}],
+['Airtel',1099,84,0,0,1,'u','JioHotstar Mobile',{s:7,ul:UA}],['Airtel',1199,84,2.5,0,1,'u','Amazon Prime Lite, Xstream Play Premium',{s:6}],
+['Airtel',1729,84,2,0,1,'u','Netflix Basic, ZEE5, JioHotstar',{s:6}],['Airtel',1798,84,3,0,1,'u','Netflix Basic',{s:6}],
+['Airtel',1849,365,0,0,0,'u','Voice only, 3600 SMS',{s:3}],['Airtel',2249,365,0,30,0,'u','',{s:3}],['Airtel',3599,365,2,0,1,'u','Xstream Play',{s:3}],
+['Airtel',3999,365,0,0,1,'u','',{s:3,ul:UA}],['Airtel',4999,365,2.5,0,1,'u','NRI pack, roaming in 189+ countries',{s:3}],
+
+['Vi',142,28,0,0,0,'u',VO,{s:15,rg:V5}],['Vi',156,30,0,0,0,'u',VO,{s:15,rg:V5}],['Vi',158,30,0,0,0,'u',VO+', 1 month',{s:15,rg:V5}],
+['Vi',185,28,0,0,0,'u',VO,{s:15,rg:V16}],['Vi',203,30,0,0,0,'u',VO,{s:15,rg:V16}],['Vi',206,30,0,0,0,'u',VO+', 1 month',{s:15,rg:V16}],
+['Vi',470,84,0,0,0,'u','Voice only, 900 SMS',{s:15,rg:V470}],['Vi',1770,365,0,0,0,'u','Voice only, 3600 SMS',{s:15,rg:V5}],['Vi',1849,365,0,0,0,'u','Voice only, 3600 SMS',{s:15,rg:V1849}],
+['Vi',218,30,0,3,0,'u','',{s:15}],['Vi',224,30,0,4,0,'u','',{s:15}],['Vi',232,30,0,4,0,'u','1 month',{s:15}],['Vi',325,28,0,10,0,'u','',{s:16}],['Vi',345,30,0,25,0,'u','',{s:15,rg:V345}],
+['Vi',210,28,1,0,0,'u','',{s:17,rg:['AS','HP','JK','OD']}],['Vi',249,24,1,0,0,'u','',{s:17,rg:['BR']}],['Vi',249,28,0.5,0,0,'u','Smart Recharge',{s:17,rg:['TN']}],
+['Vi',299,28,1,0,0,'u','Vi Movies & TV',{s:17,rg:V17}],['Vi',340,28,1,1,0,'u','',{s:17,rg:V17}],['Vi',479,48,1,0,0,'u','',{s:17,rg:V17}],['Vi',719,72,1,0,0,'u','',{s:17,rg:V17}],
+['Vi',349,28,1.5,0,0,'u','',{s:34,chk:1}],['Vi',365,28,2,0,0,'u','',{s:21}],
+['Vi',379,30,0,0,0,'u','Vi Movies & TV',{s:15,rg:V379U,ul:UV}],['Vi',379,30,2,0,0,'u','Vi Movies & TV',{s:15,rg:V379D}],
+['Vi',399,28,0,0,0,'u','JioHotstar Mobile',{s:22,ul:UV,chk:1}],['Vi',409,28,2.5,0,0,'u','',{s:23,chk:1}],['Vi',469,28,2.5,0,0,'u','JioHotstar Mobile (84 days)',{s:22}],
+['Vi',649,56,2,0,0,'u','',{s:16,rg:V649}],['Vi',670,56,0,0,0,'u','',{s:16,rg:V5B,ul:UV}],['Vi',696,56,2,0,0,'u','Amazon Prime Lite',{s:16,chk:1}],['Vi',795,56,3,0,0,'u','Vi Movies & TV Super',{s:16,chk:1}],
+['Vi',859,84,1.5,0,0,'u','',{s:33,chk:1}],['Vi',979,84,2,0,0,'u','Vi Movies & TV Super',{s:16,chk:1}],['Vi',994,84,2,0,0,'u','JioHotstar Mobile',{s:16,chk:1}],
+['Vi',996,84,2,0,0,'u','Amazon Prime Lite',{s:16,chk:1}],['Vi',998,84,2,0,0,'u','SonyLIV',{s:16,chk:1}],['Vi',1005,84,0,0,0,'u','',{s:16,rg:V5B,ul:UV}],
+['Vi',1050,84,0,0,0,'u','',{s:16,rg:['TN'],ul:UV}],['Vi',1198,70,2,0,0,'u','Netflix Basic',{s:16,chk:1}],
+['Vi',1749,180,1.5,0,0,'u','',{s:18}],['Vi',1750,150,0,0,0,'u','',{s:18,rg:V5B,ul:UV}],['Vi',2099,180,0,0,0,'u','',{s:16,rg:V5B,ul:UV}],['Vi',2180,180,0,0,0,'u','',{s:16,rg:['TN'],ul:UV}],
+['Vi',3050,290,0,0,0,'u','',{s:19,rg:['AP','KA','MP','RJ'],ul:UV}],['Vi',3499,365,1.5,0,0,'u','',{s:20}],['Vi',3599,365,2,0,0,'u','',{s:20,rg:VI3599}],
+['Vi',3699,365,2,0,0,'u','JioHotstar',{s:20}],['Vi',3799,365,2,0,0,'u','Amazon Prime Lite',{s:20}],
+
+['BSNL',99,14,0,0.05,0,'u','Mostly voice',{s:24}],['BSNL',107,20,0,3,0,'l','200 minutes calling',{s:24}],['BSNL',147,24,0,5,0,'u','',{s:24}],['BSNL',153,24,1,0,0,'u','',{s:24}],
+['BSNL',172,28,0,0,0,'u','Voice only, 100 SMS/day',{s:26}],['BSNL',184,30,0,0,0,'u','Voice only, 100 SMS/day',{s:26}],['BSNL',190,30,0,0,0,'u','Voice only, 100 SMS/day, 1 month',{s:26}],
+['BSNL',197,35,0,5,0,'l','300 minutes calling',{s:24}],['BSNL',219,28,2,0,0,'u','',{s:24}],['BSNL',225,28,2.5,0,0,'u','',{s:24}],['BSNL',228,30,2,0,0,'u','1 month',{s:24}],
+['BSNL',229,30,2,0,0,'u','1 month',{s:26}],['BSNL',247,30,0,50,0,'u','₹10 talktime',{s:26}],['BSNL',299,30,3,0,0,'u','',{s:26}],['BSNL',319,60,0,10,0,'u','',{s:24}],
+['BSNL',347,50,2,0,0,'u','',{s:27,chk:1}],['BSNL',439,80,0,0,0,'u','Voice only, 300 SMS',{s:24}],['BSNL',485,72,2,0,0,'u','',{s:28}],['BSNL',599,84,3,0,0,'u','',{s:27,chk:1}],
+['BSNL',897,165,0,24,0,'u','',{s:24}],['BSNL',997,150,2,0,0,'u','',{s:29,chk:1}],['BSNL',1499,300,0,32,0,'u','',{s:25}],['BSNL',1999,330,1.5,0,0,'u','',{s:25}],
+['BSNL',2399,365,2,0,0,'u','',{s:25}],['BSNL',2799,365,3,0,0,'u','',{s:25}]
+];
+const P=RAW.map((r,i)=>{const o=r[8]||{};return {id:i,op:r[0],price:r[1],days:r[2],dpd:r[3],extra:r[4],u5raw:!!r[5],calls:r[6],ott:r[7],s:o.s||0,rg:o.rg||null,ul:o.ul||'',chk:!!o.chk,dd:o.ul?99:r[3]+r[4]/r[2],pm:Math.round(r[1]/r[2]*30),py:Math.round(r[1]/r[2]*365)}});
+const OTTWORDS=/Hotstar|Xstream|Saavn|Movies|Netflix|Prime|SonyLIV|ZEE5|OTT|FanCode|Apple Music/;
+
+function netRank(code){
+  const sc={Jio:0,Airtel:0,Vi:0,BSNL:0},wins={Jio:[],Airtel:[],Vi:[],BSNL:[]};
+  WIN[code].split(' ').forEach((w,i)=>{for(const l of w){sc[L2O[l]]+=WT[i]/w.length;wins[L2O[l]].push(MET[i]+(w.length>1?' (tied)':''))}});
+  const order=Object.keys(sc).sort((a,b)=>sc[b]-sc[a]||(a==='BSNL')-(b==='BSNL')||(b==='Jio')-(a==='Jio'));
+  return {order,sc,wins,rank:o=>order.indexOf(o)+1};
+}
+
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const rs=n=>'₹'+n.toLocaleString('en-IN');
+const S={st:'',gb:1.5,val:'any',ops:Object.keys(OPS),g5:false,ott:false,cap:false,cur:'',sim2:'',pmin:0,pmax:0,mode:'price',sort:'pm',dir:1,hrs:[1,0.5,0.25,1,0.5,0],amx:false};
+// usage calculator: label, hint, GB per hour
+const USE=[['Reels and shorts','Instagram, YouTube Shorts',1],['YouTube, OTT on phone','standard quality',0.7],['Video calls','WhatsApp, Meet',0.3],['Social feeds, browsing, maps','',0.15],['Music streaming','',0.1],['Hotspot to a laptop','',1]];
+const PLAY='https://play.google.com/store/apps/details?id=com.techburner.aboutmoney',IOS='https://apps.apple.com/in/app/aboutmoney-expense-tracker/id6771859753';
+const isIOS=/iPhone|iPad|iPod/.test(navigator.userAgent);
+try{Object.assign(S,JSON.parse(localStorage.getItem('rpp3')||'{}'))}catch(e){}
+
+$('cnt').textContent=P.length;
+$('st').innerHTML='<option value="">Choose your state</option>'+STATES.map((s,i)=>`<option value="${i}">${s[0]}</option>`).join('');
+$('ops').innerHTML=Object.keys(OPS).map(o=>`<button type="button" class="chip" data-v="${o}"><span class="dot" style="background:${OPS[o]};margin-right:6px"></span>${o}</button>`).join('');
+$('cur').innerHTML+=Object.keys(OPS).map(o=>`<option value="${o}">${o}</option>`).join('');
+$('sim2').innerHTML+=Object.keys(OPS).map(o=>`<option value="${o}">${o}</option>`).join('');
+$('crows').innerHTML=USE.map((u,i)=>`<label class="crow" for="h${i}"><span>${u[0]}<small>${u[1]?u[1]+' · ':''}about ${u[2]>=1?u[2]+' GB':u[2]*1000+' MB'} an hour</small></span><input type="number" id="h${i}" min="0" max="16" step="0.25" inputmode="decimal" aria-label="${u[0]} hours a day"></label>`).join('');
+const calcGB=()=>USE.reduce((t,u,i)=>t+(+S.hrs[i]||0)*u[2],0)*1.1;
+const storeBtns=()=>{const p=`<a class="am-btn${isIOS?' alt':''}" href="${PLAY}" target="_blank" rel="noopener">Get it on Google Play</a>`,a=`<a class="am-btn${isIOS?'':' alt'}" href="${IOS}" target="_blank" rel="noopener">Download on the App Store</a>`;return isIOS?a+p:p+a};
+$('ambtns').innerHTML=storeBtns();
+$('ambarlink').href=isIOS?IOS:PLAY;
+
+const region=()=>S.st===''?null:STATES[+S.st][1];
+const stName=()=>S.st===''?'':STATES[+S.st][0];
+const hasData=p=>p.ul||p.dpd>0||p.extra>=1;
+const u5=(p,rc)=>p.op==='BSNL'?false:p.op==='Vi'?(p.price>=299&&hasData(p)&&!!rc&&VI5G.includes(rc)):p.u5raw;
+const dataTxt=p=>{
+  if(p.ul)return p.ul;
+  if(!p.dpd&&!p.extra)return 'No data';
+  if(!p.dpd)return p.extra<1?Math.round(p.extra*1000)+' MB total':p.extra+' GB total';
+  return p.dpd+' GB/day'+(p.extra?' + '+p.extra+' GB':'');
+};
+const valTxt=d=>d>=1000?Math.round(d/365)+' years':d>=330?Math.round(d/30.4)+' months':d+' days';
+const RANKTXT=['','Best network here','2nd best here','3rd here','Weakest here'];
+const avail=(p,rc)=>!p.rg||(!!rc&&p.rg.includes(rc));
+const valOK=p=>S.val==='any'||(S.val==='m'&&p.days<=31)||(S.val==='q'&&p.days>=50&&p.days<=100)||(S.val==='y'&&p.days>=300);
+const dataOK=(p,rc)=>S.gb===0||p.dd+1e-9>=S.gb||(S.g5&&u5(p,rc));
+const priceOK=p=>p.price>=(S.pmin||0)&&(!S.pmax||p.price<=S.pmax);
+const base=(p,rc)=>priceOK(p)&&avail(p,rc)&&valOK(p)&&dataOK(p,rc)&&(S.cap||p.calls==='u')&&(!S.ott||OTTWORDS.test(p.ott));
+const fits=(p,rc)=>S.ops.includes(p.op)&&base(p,rc);
+const byPrice=(a,b)=>a.pm-b.pm||b.dd-a.dd||a.price-b.price;
+const srcLink=p=>p.s&&SRC[p.s]?`<a href="${SRC[p.s][1]}" target="_blank" rel="noopener">${esc(SRC[p.s][0])}</a>`:'';
+
+function why(p,list,rc){
+  const b=[];
+  if(S.mode==='net')b.push(`${p.op} has the best network in ${RG[rc]}, and this is its cheapest plan that matches what you picked.`);
+  else b.push(`Cheapest of ${list.length} plan${list.length>1?'s':''} sold in ${stName()} that match what you picked.`);
+  if(S.g5&&u5(p,rc)&&!p.ul&&p.dd<S.gb)b.push(`Its daily quota is ${dataTxt(p)}, but unlimited 5G covers the rest where you have 5G coverage.`);
+  else if(S.gb>0&&!p.ul&&p.dd>S.gb+0.4)b.push('It gives more data than you need, because no smaller plan here costs less per month.');
+  if(p.days>=84)b.push(`You pay ${rs(p.price)} upfront and skip ${Math.max(1,Math.round(p.days/28)-1)} recharges.`);
+  if(p.op==='BSNL')b.push('BSNL is 4G only, so check signal at home first.');
+  if(p.chk)b.push('Sources disagree on some details of this plan, so confirm it in the app before paying.');
+  return b.join(' ');
+}
+
+function render(){
+  try{localStorage.setItem('rpp3',JSON.stringify(S))}catch(e){}
+  const rc=region();
+  $('st').value=S.st;$('gb').value=S.gb;$('gbv').textContent=S.gb===0?'None':S.gb+' GB';
+  $('g5').checked=S.g5;$('ott').checked=S.ott;$('cap').checked=S.cap;$('cur').value=S.cur;
+  for(const b of $('presets').children)b.setAttribute('aria-pressed',+b.dataset.v===S.gb);
+  for(const b of $('val').children)b.setAttribute('aria-pressed',b.dataset.v===S.val);
+  for(const b of $('mode').children)b.setAttribute('aria-pressed',b.dataset.v===S.mode);
+  for(const b of $('ops').children)b.setAttribute('aria-pressed',S.ops.includes(b.dataset.v));
+  $('sim2').value=S.sim2;
+  if(document.activeElement!==$('pmin'))$('pmin').value=S.pmin||'';if(document.activeElement!==$('pmax'))$('pmax').value=S.pmax||'';
+  const pk=(S.pmin||0)+'-'+(S.pmax||99999);for(const b of $('prc').children)b.setAttribute('aria-pressed',b.dataset.v===pk);
+  $('prv').textContent=!S.pmin&&!S.pmax?'Any':!S.pmax?rs(S.pmin)+'+':!S.pmin?'Up to '+rs(S.pmax):rs(S.pmin)+'–'+rs(S.pmax);
+  USE.forEach((u,i)=>{const el=$('h'+i);if(document.activeElement!==el)el.value=S.hrs[i]});
+  const cg=calcGB();$('cgb').textContent=cg.toFixed(1)+' GB';
+  const cgr=Math.min(4,Math.ceil(cg*2)/2);$('cuse').textContent=cg<0.05?'Calls only':'Use '+cgr+' GB/day';
+  $('ambar').hidden=!!S.amx;
+  $('s2').innerHTML='';$('amcardh').textContent='Track this recharge in AboutMoney';$('amhook').textContent='Recharge sorted. Now the rest of your money.';
+
+  if(!rc){
+    $('pick').innerHTML='<div class="empty"><h2>First, which state are you in?</h2><p class="sub" style="font-size:15px">Choose it at the top of the form. Network quality, 5G and many plans depend on where you live, so the pick changes by state.</p></div>';
+    $('net').innerHTML='';$('rows').innerHTML='';$('rankh').textContent='';
+    renderTable(null,null);return;
+  }
+  const nr=netRank(rc);
+  const list=P.filter(p=>fits(p,rc)).sort(byPrice);
+  const topNet=nr.order.find(o=>S.ops.includes(o)&&list.some(p=>p.op===o));
+  const best=S.mode==='net'?list.find(p=>p.op===topNet):list[0];
+
+  $('net').innerHTML=`<h2>Network in ${esc(stName())}</h2>`+nr.order.map((o,i,_,mx=Math.max(1,...Object.values(nr.sc)))=>`<div class="nrow${i?'':' top'}"><div class="rk">${i+1}</div><div class="on"><span class="dot" style="background:${OPS[o]}"></span> ${o}</div><div class="nb"><i style="width:${Math.max(3,nr.sc[o]/mx*100)}%"></i></div><div class="w">${nr.wins[o].length?'Wins '+nr.wins[o].join(', '):(o==='BSNL'?'Wins nothing here. 4G only, slowest in tests':'Wins no category here')}</div></div>`).join('')+`<p class="sub">Opensignal, ${esc(RG[rc])} region, February 2026 report.${rc==='DL'||rc==='MU'?' In Delhi and Mumbai, BSNL service runs through MTNL, so its plans there may differ.':''}</p>`;
+
+  if(!best){
+    $('pick').innerHTML='<div class="empty"><h2>No plan matches all of that</h2><p class="sub" style="font-size:15px">Try a wider price range, another recharge period, more operators, or less daily data.</p></div>';
+    $('rows').innerHTML='';$('rankh').textContent='';
+  }else{
+    const r=nr.rank(best.op),cheapest=list[0];
+    let save='';
+    if(S.mode==='price'&&r>1){
+      const alt=list.find(p=>p.op===topNet);
+      if(alt)save=`Want the best network in ${esc(stName())}? ${esc(alt.op)} ${rs(alt.price)} costs ${rs(alt.pm)}/month, ${rs(alt.pm-best.pm)} a month more.`;
+    }else if(S.mode==='net'&&cheapest.id!==best.id){
+      const cr=nr.rank(cheapest.op);
+      save=`The cheapest plan that fits is ${esc(cheapest.op)} ${rs(cheapest.price)} at ${rs(cheapest.pm)}/month, ${rs(best.pm-cheapest.pm)} a month less, on the ${cr===2?'2nd best':cr===3?'3rd':'weakest'} network here.`;
+    }
+    if(S.cur){
+      const own=P.filter(p=>p.op===S.cur&&base(p,rc)).sort(byPrice)[0];
+      if(own&&own.op!==best.op){const d=own.py-best.py;save+=d>0?` Your best ${esc(S.cur)} option is ${rs(own.price)} (${rs(own.pm)}/month); porting would save about <strong>${rs(d)} a year</strong>.`:` Staying on ${esc(S.cur)} with ${rs(own.price)} costs about the same or less.`}
+      else if(own)save+=` The pick is on ${esc(S.cur)}, so you don't need to port.`;
+      else save+=` ${esc(S.cur)} has no plan in this list that matches your choices.`;
+    }
+    $('pick').innerHTML=`<div class="voucher"><div class="v-main">
+      <div class="v-op"><span class="dot" style="background:${OPS[best.op]}"></span>${esc(best.op)} prepaid · ${S.mode==='net'?'best network pick':'best price pick'} <span class="tag${r===1?' t1':''}">${RANKTXT[r]}</span>${best.chk?' <span class="tag chk">Check in app</span>':''}</div>
+      <div class="fig-num">${rs(best.price)}</div>
+      <div class="v-per">works out to <strong>${rs(best.pm)} a month</strong></div>
+      <div class="v-grid">
+        <div>Validity<span>${valTxt(best.days)}</span></div>
+        <div>Data<span>${esc(dataTxt(best))}</span></div>
+        <div>Calls<span>${best.calls==='u'?'Unlimited':esc(best.ott)}</span></div>
+        <div>5G<span>${best.op==='BSNL'?'4G only':u5(best,rc)?'Unlimited 5G':'4G quota'}</span></div>
+        ${best.ott&&best.calls==='u'?`<div>Extras<span>${esc(best.ott)}</span></div>`:''}
+      </div></div>
+      <div class="stub"><small>Cost for a year</small><div class="y">${rs(best.py)}</div><small>₹${(best.py/365).toFixed(2)} a day</small></div></div>
+      <p class="why">${esc(why(best,list,rc))} <span class="sub">Source: ${srcLink(best)}</span></p>
+      <div class="save">${save.trim()}</div>
+      <button type="button" class="copy" id="cp">Copy this plan</button>`;
+    $('cp').onclick=()=>{
+      const t=`${best.op} ₹${best.price} · ${valTxt(best.days)} · ${dataTxt(best)} · ${best.calls==='u'?'unlimited calls':best.ott}${u5(best,rc)?' · unlimited 5G':''} (₹${best.pm}/month, ${RANKTXT[r].toLowerCase()} in ${stName()})`;
+      navigator.clipboard.writeText(t).then(()=>{$('cp').textContent='Copied'},()=>{$('cp').textContent='Copy failed'});
+      setTimeout(()=>{const c=$('cp');if(c)c.textContent='Copy this plan'},1800);
+    };
+    // second SIM: cheapest way to keep that number active in this state
+    if(S.sim2){
+      const keep=P.filter(p=>p.op===S.sim2&&avail(p,rc)).sort((a,b)=>a.pm-b.pm||a.price-b.price)[0];
+      if(keep){
+        const tm=best.pm+keep.pm,ty=best.py+keep.py;
+        $('s2').innerHTML=`<b>Second SIM (${esc(S.sim2)}):</b> the cheapest way to keep it active is ${rs(keep.price)} for ${valTxt(keep.days)} (${esc(dataTxt(keep))}${keep.calls==='u'?', unlimited calls':''}), which works out to ${rs(keep.pm)} a month. <b>Both SIMs together: ${rs(tm)} a month, ${rs(ty)} a year.</b>${S.sim2===best.op?'':' Use the main SIM above for data and this one just to keep the number.'} <span class="sub">Source: ${srcLink(keep)}</span>`;
+      }else $('s2').textContent=`No ${S.sim2} plan in this list is sold in ${stName()}.`;
+    }
+    // AboutMoney hook tied to the result
+    let sv=0;
+    if(S.cur){const own=P.filter(p=>p.op===S.cur&&base(p,rc)).sort(byPrice)[0];if(own&&own.py>best.py)sv=own.py-best.py}
+    $('amcardh').textContent=sv>0?`Saving ${rs(sv)} a year? Track it in AboutMoney`:`Track this ${rs(best.price)} recharge in AboutMoney`;
+    $('amhook').textContent=sv>0?`You could save ${rs(sv)} a year on recharge. Find the next saving.`:`Your ${rs(best.pm)}/month recharge is sorted. Now the rest of your money.`;
+    $('ambartxt').textContent=`Got your plan? Track every rupee with India's fastest expense tracker`;
+    const top=list.slice(0,10),max=Math.max(...top.map(p=>p.pm));
+    $('rankh').textContent=list.length>10?`Top 10 of ${list.length} plans that fit, by monthly cost`:'Every plan that fits, by monthly cost';
+    $('rows').innerHTML=top.map(p=>`<div class="row${p.id===best.id?' win':''}"><div class="nm"><span class="dot" style="background:${OPS[p.op]}"></span>${esc(p.op)} ${rs(p.price)} · ${p.days}d <span class="tag${nr.rank(p.op)===1?' t1':''}">#${nr.rank(p.op)}</span></div><div class="bar"><i style="width:${Math.max(4,p.pm/max*100)}%"></i></div><div class="val">${rs(p.pm)}/mo</div></div>`).join('');
+  }
+  renderTable(rc,nr);
+}
+
+function renderTable(rc,nr){
+  const shown=P.filter(p=>avail(p,rc)||!rc);
+  $('allh').textContent=rc?`All ${shown.length} plans sold in ${stName()}, with network rank`:`All ${P.length} plans in this list`;
+  const val=p=>S.sort==='nr'?(nr?nr.rank(p.op):0):S.sort==='u5'?(u5(p,rc)?0:1):S.sort==='s'?p.s:p[S.sort];
+  const sorted=[...shown].sort((a,b)=>{const x=val(a),y=val(b);return (typeof x==='string'?x.localeCompare(y):x-y)*S.dir||a.pm-b.pm});
+  const rows=S.all?sorted:sorted.slice(0,25);
+  $('showall').hidden=sorted.length<=25;$('showall').textContent=S.all?'Show fewer':`Show all ${sorted.length} plans`;
+  $('tbl').tBodies[0].innerHTML=rows.map(p=>{
+    const ok=rc&&fits(p,rc);
+    const g5=p.op==='BSNL'?'4G only':p.op==='Vi'?(p.price>=299&&hasData(p)?(rc?(u5(p,rc)?'Unlimited':'No Vi 5G here'):'In Vi 5G cities'):'–'):p.u5raw?'Unlimited':'–';
+    return `<tr class="${ok?'':'off'}"><td data-l="Operator"><span class="dot" style="background:${OPS[p.op]};margin-right:6px"></span>${esc(p.op)}</td><td class="n" data-l="Price">${rs(p.price)}</td><td class="n" data-l="Validity">${valTxt(p.days)}</td><td data-l="Data">${esc(dataTxt(p))}</td><td class="n" data-l="Per month">${rs(p.pm)}</td><td data-l="Network here">${nr?`<span class="tag${nr.rank(p.op)===1?' t1':''}">${RANKTXT[nr.rank(p.op)]}</span>`:'Pick a state'}</td><td data-l="5G">${g5}</td><td data-l="Extras">${esc(p.ott||'–')}${p.rg&&!rc?' · some states only':''}</td><td data-l="Source">${srcLink(p)}${p.chk?' <span class="tag chk">Check in app</span>':''}</td></tr>`}).join('');
+  for(const th of $('tbl').tHead.rows[0].cells){if(th.dataset.k===S.sort)th.setAttribute('aria-sort',S.dir>0?'ascending':'descending');else th.removeAttribute('aria-sort')}
+}
+
+$('st').addEventListener('change',e=>{S.st=e.target.value;render()});
+$('gb').addEventListener('input',e=>{S.gb=+e.target.value;render()});
+$('presets').addEventListener('click',e=>{const b=e.target.closest('button');if(b){S.gb=+b.dataset.v;render()}});
+$('val').addEventListener('click',e=>{const b=e.target.closest('button');if(b){S.val=b.dataset.v;render()}});
+$('mode').addEventListener('click',e=>{const b=e.target.closest('button');if(b){S.mode=b.dataset.v;render()}});
+$('ops').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const o=b.dataset.v;S.ops=S.ops.includes(o)?S.ops.filter(x=>x!==o):[...S.ops,o];render()});
+$('g5').addEventListener('change',e=>{S.g5=e.target.checked;render()});
+$('ott').addEventListener('change',e=>{S.ott=e.target.checked;render()});
+$('cap').addEventListener('change',e=>{S.cap=e.target.checked;render()});
+$('cur').addEventListener('change',e=>{S.cur=e.target.value;render()});
+$('prc').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const [a,z]=b.dataset.v.split('-').map(Number);S.pmin=a;S.pmax=z>=99999?0:z;render()});
+$('pmin').addEventListener('input',e=>{S.pmin=Math.max(0,+e.target.value||0);render()});
+$('pmax').addEventListener('input',e=>{S.pmax=Math.max(0,+e.target.value||0);render()});
+$('sim2').addEventListener('change',e=>{S.sim2=e.target.value;render()});
+$('crows').addEventListener('input',e=>{const i=+e.target.id.slice(1);if(e.target.id[0]!=='h')return;S.hrs[i]=Math.max(0,Math.min(16,+e.target.value||0));render()});
+$('cuse').addEventListener('click',()=>{const cg=calcGB();S.gb=cg<0.05?0:Math.min(4,Math.ceil(cg*2)/2);render()});
+$('amx').addEventListener('click',()=>{S.amx=true;render()});
+$('f').addEventListener('submit',e=>e.preventDefault());
+$('tbl').tHead.addEventListener('click',e=>{const th=e.target.closest('th');if(!th)return;const k=th.dataset.k;if(S.sort===k)S.dir=-S.dir;else{S.sort=k;S.dir=1}render()});
+try{const h=location.hostname;if(/^https?:$/.test(location.protocol)&&h&&!/claude|anthropic|localhost|usercontent/.test(h)){$('reel').innerHTML='<p style="font-weight:600;margin:0 0 10px;font-size:15px">See AboutMoney in action</p><div class="reel-frame"><iframe src="https://www.instagram.com/reel/DaSx9X-AB8B/embed/" title="AboutMoney reel on Instagram" loading="lazy" allow="encrypted-media; picture-in-picture" scrolling="no"></iframe></div><a class="reel-link" href="https://www.instagram.com/reel/DaSx9X-AB8B/" target="_blank" rel="noopener">Open on Instagram ↗</a>'}}catch(e){}
+try{if(window.matchMedia&&window.matchMedia('(min-width:861px)').matches)$('more').open=true}catch(e){}
+$('showall').addEventListener('click',()=>{S.all=!S.all;render()});
+render();
+}
+</script>
+</body>
+</html>
